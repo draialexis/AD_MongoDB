@@ -6,7 +6,6 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.bson.types.ObjectId;
 
 @Path("/pokemong")
 @Produces(MediaType.APPLICATION_JSON)
@@ -19,8 +18,7 @@ public class PokemongController {
     @Path("/{id}")
     public Response getPokemong(@PathParam("id") String id) {
         try {
-            ObjectId objectId = new ObjectId(id);
-            Pokemong pokemong = pokemongService.getPokemong(objectId);
+            Pokemong pokemong = pokemongService.getPokemong(id);
             if (pokemong != null) {
                 return Response.ok(pokemong)
                                .build();
@@ -48,7 +46,7 @@ public class PokemongController {
     public Response createPokemong(Pokemong pokemong) {
 
         if (pokemongService.isNotMature(pokemong)) {
-            pokemong.isMegaEvolved = null;
+            pokemong.setMegaEvolved(null);
         }
 
         Pokemong newPokemong = pokemongService.addPokemong(pokemong);
@@ -64,10 +62,10 @@ public class PokemongController {
     public Response updatePokemong(@PathParam("id") String id, Pokemong pokemong) {
         try {
             if (pokemongService.isNotMature(pokemong)) {
-                pokemong.isMegaEvolved = null;
+                pokemong.setMegaEvolved(null);
             }
 
-            pokemong.id = new ObjectId(id);
+            pokemong.setId(id);
             Pokemong updatedPokemong = pokemongService.updatePokemong(pokemong);
 
             if (updatedPokemong != null) {
@@ -91,8 +89,7 @@ public class PokemongController {
     @Path("/{id}")
     public Response deletePokemong(@PathParam("id") String id) {
         try {
-            ObjectId objectId = new ObjectId(id);
-            pokemongService.deletePokemong(objectId);
+            pokemongService.deletePokemong(id);
             return Response.ok()
                            .build();
 

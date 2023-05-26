@@ -1,9 +1,0 @@
-package fr.uca.iut.repositories;
-
-import fr.uca.iut.entities.Type;
-import io.quarkus.mongodb.panache.PanacheMongoRepository;
-import jakarta.enterprise.context.ApplicationScoped;
-
-@ApplicationScoped
-public class TypeRepository implements PanacheMongoRepository<Type> {
-}

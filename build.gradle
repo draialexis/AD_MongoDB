@@ -9,14 +9,17 @@ repositories {
 }
 
 dependencies {
+    // FIXME "Provides transitive vulnerable dependency maven:org.jboss.resteasy:resteasy-core:6.2.1.Final
+    //  CVE-2023-0482 7.8 Creation of Temporary File With Insecure Permissions vulnerability with medium severity found
+    //  Results powered by Checkmarx(c)"
     implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
-    implementation 'io.quarkus:quarkus-resteasy-reactive-jsonb'
-    implementation 'io.quarkus:quarkus-mongodb-client'
-    implementation 'io.quarkus:quarkus-arc'
-    implementation 'io.quarkus:quarkus-resteasy-reactive'
-    implementation 'io.quarkus:quarkus-mongodb-panache'
-    testImplementation 'io.quarkus:quarkus-junit5'
-    testImplementation 'io.rest-assured:rest-assured'
+    implementation 'io.quarkus:quarkus-resteasy:3.0.0.Alpha6'
+    implementation 'io.quarkus:quarkus-resteasy-jackson:3.0.0.Alpha6'
+    implementation 'io.quarkus:quarkus-arc:3.0.0.Alpha6'
+    implementation 'io.quarkus:quarkus-mongodb-client:3.0.0.Alpha6'
+    implementation 'org.mongodb:mongodb-driver-sync:4.9.1'
+    testImplementation 'io.quarkus:quarkus-junit5:3.0.0.Alpha6'
+    testImplementation 'io.rest-assured:rest-assured:5.3.0'
 }
 
 group 'fr.uca.iut'

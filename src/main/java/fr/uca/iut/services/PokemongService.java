@@ -4,7 +4,6 @@ import fr.uca.iut.entities.Pokemong;
 import fr.uca.iut.repositories.PokemongRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.bson.types.ObjectId;
 
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class PokemongService {
         return pokemong;
     }
 
-    public Pokemong getPokemong(ObjectId id) {
+    public Pokemong getPokemong(String id) {
         return pokemongRepository.findById(id);
     }
 
@@ -27,7 +26,7 @@ public class PokemongService {
         return pokemongRepository.listAll();
     }
 
-    public void deletePokemong(ObjectId id) {
+    public void deletePokemong(String id) {
         Pokemong pokemong = pokemongRepository.findById(id);
         if (pokemong != null) {
             pokemongRepository.delete(pokemong);
@@ -35,18 +34,18 @@ public class PokemongService {
     }
 
     public Pokemong updatePokemong(Pokemong pokemong) {
-        Pokemong existingPokemong = pokemongRepository.findById(pokemong.id);
+        Pokemong existingPokemong = pokemongRepository.findById(pokemong.getId());
         if (existingPokemong != null) {
-            existingPokemong.nickname = pokemong.nickname;
-            existingPokemong.dob = pokemong.dob;
-            existingPokemong.level = pokemong.level;
-            existingPokemong.pokedexId = pokemong.pokedexId;
-            existingPokemong.evoStage = pokemong.evoStage;
-            existingPokemong.evoTrack = pokemong.evoTrack;
-            existingPokemong.isMegaEvolved = pokemong.isMegaEvolved;
-            existingPokemong.trainer = pokemong.trainer;
-            existingPokemong.types = pokemong.types;
-            existingPokemong.moveSet = pokemong.moveSet;
+            existingPokemong.setNickname(pokemong.getNickname());
+            existingPokemong.setDob(pokemong.getDob());
+            existingPokemong.setLevel(pokemong.getLevel());
+            existingPokemong.setPokedexId(pokemong.getPokedexId());
+            existingPokemong.setEvoStage(pokemong.getEvoStage());
+            existingPokemong.setEvoTrack(pokemong.getEvoTrack());
+            existingPokemong.setMegaEvolved(pokemong.getMegaEvolved());
+            existingPokemong.setTrainer(pokemong.getTrainer());
+            existingPokemong.setTypes(pokemong.getTypes());
+            existingPokemong.setMoveSet(pokemong.getMoveSet());
             pokemongRepository.persistOrUpdate(existingPokemong);
         }
         return existingPokemong;
@@ -54,10 +53,12 @@ public class PokemongService {
 
     public boolean isNotMature(Pokemong pokemong) {
         return pokemong == null
-               || pokemong.evoStage == null
-               || pokemong.evoTrack == null
-               || pokemong.evoTrack.isEmpty()
-               || (pokemong.evoStage != pokemong.evoTrack.size() - 1);
+               || pokemong.getEvoStage() == null
+               || pokemong.getEvoTrack() == null
+               || pokemong.getEvoTrack()
+                          .isEmpty()
+               || (pokemong.getEvoStage() != pokemong.getEvoTrack()
+                                                     .size() - 1);
     }
 
     // TODO PATCH ?

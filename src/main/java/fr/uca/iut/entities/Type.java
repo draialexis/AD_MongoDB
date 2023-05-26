@@ -1,17 +1,41 @@
 package fr.uca.iut.entities;
 
 import fr.uca.iut.utils.TypeName;
-import io.quarkus.mongodb.panache.PanacheMongoEntity;
-import io.quarkus.mongodb.panache.common.MongoEntity;
 
 import java.util.List;
 import java.util.Objects;
 
-@MongoEntity(collection = "types")
-public class Type extends PanacheMongoEntity {
-    public TypeName name;
-    public List<TypeName> weakAgainst;
-    public List<TypeName> effectiveAgainst;
+public class Type {
+
+    private TypeName name;
+    private List<TypeName> weakAgainst;
+    private List<TypeName> effectiveAgainst;
+
+    public Type() {}
+
+    public TypeName getName() {
+        return name;
+    }
+
+    public void setName(TypeName name) {
+        this.name = name;
+    }
+
+    public List<TypeName> getWeakAgainst() {
+        return weakAgainst;
+    }
+
+    public void setWeakAgainst(List<TypeName> weakAgainst) {
+        this.weakAgainst = weakAgainst;
+    }
+
+    public List<TypeName> getEffectiveAgainst() {
+        return effectiveAgainst;
+    }
+
+    public void setEffectiveAgainst(List<TypeName> effectiveAgainst) {
+        this.effectiveAgainst = effectiveAgainst;
+    }
 
     @Override
     public int hashCode() {
@@ -27,4 +51,5 @@ public class Type extends PanacheMongoEntity {
                Objects.equals(weakAgainst, type.weakAgainst) &&
                Objects.equals(effectiveAgainst, type.effectiveAgainst);
     }
+
 }
