@@ -1,27 +1,17 @@
 package fr.uca.iut.entities;
 
-import org.bson.codecs.pojo.annotations.BsonId;
+import fr.uca.iut.utils.enums.MoveCategoryName;
 
 public class Move extends GenericEntity {
     public static final String COLLECTION_NAME = "moves";
 
-    @BsonId
-    private String id;
     private String name;
-    private String category;
+    private MoveCategoryName category;
     private Integer power;
     private Integer accuracy;
     private Type type;
 
     public Move() {}
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -31,11 +21,11 @@ public class Move extends GenericEntity {
         this.name = name;
     }
 
-    public String getCategory() {
+    public MoveCategoryName getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(MoveCategoryName category) {
         this.category = category;
     }
 

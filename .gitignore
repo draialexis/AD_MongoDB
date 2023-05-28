@@ -81,3 +81,7 @@ gradle-app.setting
 
 # Cache of project
 .gradletasknamecache
+
+# Others
+docs/todos.md
+/src/test/resources/application.properties

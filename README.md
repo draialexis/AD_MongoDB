@@ -13,15 +13,11 @@ The application is developed using the Quarkus framework and uses `MongoDB` as i
 This application is a RESTful service designed to emulate a basic Pokemong management system. It allows users to perform
 CRUD operations on Pokemongs, trainers, moves, and types.
 
-<details><summary>🗂️ See the DCM</summary>
+### 🗂️ DCM
 <img src="./docs/mcd.png" alt="Data Concept Model" title="Data Concept Model">
 
-</details>
-
-<details><summary>🧬 See the UML Class diagram</summary>
+### 🧬 UML Class diagram
 <img src="./docs/nosql_uml.png" alt="UML Class Diagram" title="UML Class Diagram">
-
-</details>
 
 ## Prep steps
 
@@ -83,10 +79,18 @@ You can run the application in dev mode using:
 
 ## API testing
 
+### 🏴‍☠️ SwaggerUI
+
+Thanks to this project's OpenAPI specs, you can explore the API in a lot of ways.
+A popular choice is SwaggerUI -- after you run the app, just go to http://localhost:8080/q/swagger-ui and have fun.
+
+⚠️ Unfortunately, Swagger or Quarkus or SmallRye adds the field `id` to all request examples, but in fact ***you should
+not include id** when you POST a new document.*
+
 ### 🩺 API testing tools
 
-It is recommended to use an API testing tool such as [Postman](https://www.postman.com/)
-or [Insomnia](https://insomnia.rest/), while playing around with this app.
+You can use an API testing tool such as [Postman](https://www.postman.com/)
+or [Insomnia](https://insomnia.rest/) to test this app.
 
 ### 📱 Front end (later)
 

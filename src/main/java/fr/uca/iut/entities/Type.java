@@ -1,7 +1,8 @@
 package fr.uca.iut.entities;
 
-import fr.uca.iut.utils.TypeName;
+import fr.uca.iut.utils.enums.TypeName;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,7 +23,7 @@ public class Type {
     }
 
     public List<TypeName> getWeakAgainst() {
-        return weakAgainst;
+        return Collections.unmodifiableList(weakAgainst);
     }
 
     public void setWeakAgainst(List<TypeName> weakAgainst) {
@@ -30,7 +31,7 @@ public class Type {
     }
 
     public List<TypeName> getEffectiveAgainst() {
-        return effectiveAgainst;
+        return Collections.unmodifiableList(effectiveAgainst);
     }
 
     public void setEffectiveAgainst(List<TypeName> effectiveAgainst) {

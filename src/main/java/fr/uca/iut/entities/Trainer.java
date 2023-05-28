@@ -1,32 +1,20 @@
 package fr.uca.iut.entities;
 
-import org.bson.codecs.pojo.annotations.BsonId;
-import org.bson.types.ObjectId;
-
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 public class Trainer extends GenericEntity {
     public static final String COLLECTION_NAME = "trainers";
 
-    @BsonId
-    private String id;
     private String name;
     private LocalDate dob;
     private Integer wins;
     private Integer losses;
-    private List<ObjectId> pastOpponents;
-    private List<ObjectId> pokemongs;
+    private List<String> pastOpponents;
+    private List<TrainerPokemong> pokemongs;
 
     public Trainer() {}
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -60,19 +48,19 @@ public class Trainer extends GenericEntity {
         this.losses = losses;
     }
 
-    public List<ObjectId> getPastOpponents() {
-        return pastOpponents;
+    public List<String> getPastOpponents() {
+        return Collections.unmodifiableList(pastOpponents);
     }
 
-    public void setPastOpponents(List<ObjectId> pastOpponents) {
+    public void setPastOpponents(List<String> pastOpponents) {
         this.pastOpponents = pastOpponents;
     }
 
-    public List<ObjectId> getPokemongs() {
-        return pokemongs;
+    public List<TrainerPokemong> getPokemongs() {
+        return Collections.unmodifiableList(pokemongs);
     }
 
-    public void setPokemongs(List<ObjectId> pokemongs) {
+    public void setPokemongs(List<TrainerPokemong> pokemongs) {
         this.pokemongs = pokemongs;
     }
 }

@@ -1,4 +1,4 @@
-package fr.uca.iut.utils;
+package fr.uca.iut.utils.enums;
 
 public enum TypeName {
     NORMAL,

@@ -1,22 +1,22 @@
 package fr.uca.iut.controllers;
 
-import fr.uca.iut.entities.Pokemong;
-import fr.uca.iut.services.PokemongService;
+import fr.uca.iut.entities.Move;
+import fr.uca.iut.services.MoveService;
 import jakarta.annotation.PostConstruct;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
-@Path("/pokemong")
+@Path("/move")
 @Produces(MediaType.APPLICATION_JSON)
-public class PokemongController extends GenericController<Pokemong> {
+public class MoveController extends GenericController<Move> {
 
     @Inject
-    PokemongService pokemongService;
+    MoveService moveService;
 
     @PostConstruct
     public void init() {
-        setService(pokemongService);
+        setService(moveService);
     }
 }
