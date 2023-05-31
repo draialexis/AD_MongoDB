@@ -128,8 +128,10 @@ public class PokemongCodec extends GenericCodec<Pokemong> {
                                               .collect(Collectors.toList());
         pokemong.setEvoTrack(evoTrack);
 
-        pokemong.setTrainer(document.getObjectId("trainer")
-                                    .toString());
+        ObjectId trainerId = document.getObjectId("trainer");
+        if (trainerId != null) {
+            pokemong.setTrainer(trainerId.toString());
+        }
 
         List<Type> types = document.getList("types", Document.class)
                                    .stream()
