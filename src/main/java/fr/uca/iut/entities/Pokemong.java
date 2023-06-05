@@ -1,6 +1,8 @@
 package fr.uca.iut.entities;
 
 import com.mongodb.lang.Nullable;
+import fr.uca.iut.entities.denormalized.PokemongMove;
+import fr.uca.iut.entities.embedded.Type;
 import fr.uca.iut.utils.enums.PokemongName;
 
 import java.time.LocalDate;
@@ -8,8 +10,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public class Pokemong extends GenericEntity {
+public class Pokemong extends GenericVersionedEntity {
     public static final String COLLECTION_NAME = "pokemongs";
+
+    public static final Integer LATEST_SCHEMA_VERSION = 1;
 
     @Nullable
     private String nickname;
@@ -20,14 +24,15 @@ public class Pokemong extends GenericEntity {
     private List<PokemongName> evoTrack;
     @Nullable
     private String trainer;
-    private List<Type> types;
+    private Set<Type> types;
 
     /**
      * pokemong.moveSet: [{_id: ObjectId, name: String}]
      */
     private Set<PokemongMove> moveSet;
 
-    public Pokemong() {}
+    public Pokemong() {
+    }
 
     @Nullable
     public String getNickname() {
@@ -71,11 +76,11 @@ public class Pokemong extends GenericEntity {
         this.trainer = trainer;
     }
 
-    public List<Type> getTypes() {
-        return Collections.unmodifiableList(types);
+    public Set<Type> getTypes() {
+        return Collections.unmodifiableSet(types);
     }
 
-    public void setTypes(List<Type> types) {
+    public void setTypes(Set<Type> types) {
         this.types = types;
     }
 
@@ -96,8 +101,7 @@ public class Pokemong extends GenericEntity {
     public void updateMove(String id, String name) {
         for (PokemongMove move : moveSet) {
             if (move.getId()
-                    .equals(id))
-            {
+                    .equals(id)) {
                 move.setName(name);
                 break;
             }
@@ -109,7 +113,11 @@ public class Pokemong extends GenericEntity {
     }
 
     public List<PokemongName> getEvoTrack() {
-        return evoTrack;
+        return Collections.unmodifiableList(evoTrack);
+    }
+
+    public void setEvoTrack(List<PokemongName> evoTrack) {
+        this.evoTrack = evoTrack;
     }
 
     public Integer getEvoStage() {
@@ -118,10 +126,6 @@ public class Pokemong extends GenericEntity {
 
     public void setEvoStage(Integer evoStage) {
         this.evoStage = evoStage;
-    }
-
-    public void setEvoTrack(List<PokemongName> evoTrack) {
-        this.evoTrack = evoTrack;
     }
 }
 

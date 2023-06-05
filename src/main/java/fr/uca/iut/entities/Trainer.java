@@ -1,20 +1,25 @@
 package fr.uca.iut.entities;
 
+import fr.uca.iut.entities.denormalized.TrainerPokemong;
+
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
-public class Trainer extends GenericEntity {
+public class Trainer extends GenericVersionedEntity {
     public static final String COLLECTION_NAME = "trainers";
+    public static final Integer LATEST_SCHEMA_VERSION = 1;
 
     private String name;
     private LocalDate dob;
     private Integer wins;
     private Integer losses;
     private List<String> pastOpponents;
-    private List<TrainerPokemong> pokemongs;
+    private Set<TrainerPokemong> pokemongs;
 
-    public Trainer() {}
+    public Trainer() {
+    }
 
     public String getName() {
         return name;
@@ -56,11 +61,19 @@ public class Trainer extends GenericEntity {
         this.pastOpponents = pastOpponents;
     }
 
-    public List<TrainerPokemong> getPokemongs() {
-        return Collections.unmodifiableList(pokemongs);
+    public Set<TrainerPokemong> getPokemongs() {
+        return Collections.unmodifiableSet(pokemongs);
     }
 
-    public void setPokemongs(List<TrainerPokemong> pokemongs) {
+    public void setPokemongs(Set<TrainerPokemong> pokemongs) {
         this.pokemongs = pokemongs;
+    }
+
+    public void addPokemong(TrainerPokemong trainerPokemong) {
+        pokemongs.add(trainerPokemong);
+    }
+
+    public void removePokemong(String id) {
+        pokemongs.removeIf(trainerPokemong -> trainerPokemong.getId().equals(id));
     }
 }

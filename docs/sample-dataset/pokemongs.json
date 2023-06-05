@@ -1,0 +1,98 @@
+{
+  "_id": {
+    "$oid": "60a64f7eae945a6e60b0e911"
+  },
+  "schemaVersion": 1,
+  "nickname": "Sparky",
+  "dob": {
+    "$date": {
+      "$numberLong": "761597551000"
+    }
+  },
+  "level": 15,
+  "pokedexId": 1,
+  "evoStage": 1,
+  "evoTrack": [
+    "BULBASAUR",
+    "IVYSAUR",
+    "VENUSAUR"
+  ],
+  "trainer": {
+    "$oid": "60a64f7eae945a6e60b0e914"
+  },
+  "types": [
+    {
+      "name": "GRASS",
+      "weakAgainst": [
+        "FIRE"
+      ],
+      "effectiveAgainst": [
+        "WATER",
+        "GROUND"
+      ]
+    }
+  ],
+  "moveSet": [
+    {
+      "_id": {
+        "$oid": "60a64f7eae945a6e60b0e913"
+      },
+      "name": "Tackle"
+    },
+    {
+      "_id": {
+        "$oid": "60a64f7eae945a6e60b0e912"
+      },
+      "name": "Vine Whip"
+    }
+  ]
+}
+{
+  "_id": {
+    "$oid": "60a64f7eae945a6e60b0e916"
+  },
+  "schemaVersion": 1,
+  "nickname": "Blazey",
+  "dob": {
+    "$date": {
+      "$numberLong": "761597651000"
+    }
+  },
+  "level": 10,
+  "pokedexId": 4,
+  "evoStage": 0,
+  "evoTrack": [
+    "CHARMANDER",
+    "CHARMELEON",
+    "CHARIZARD"
+  ],
+  "trainer": {
+    "$oid": "60a64f7eae945a6e60b0e915"
+  },
+  "types": [
+    {
+      "name": "FIRE",
+      "weakAgainst": [
+        "WATER",
+        "GROUND"
+      ],
+      "effectiveAgainst": [
+        "GRASS"
+      ]
+    }
+  ],
+  "moveSet": [
+    {
+      "_id": {
+        "$oid": "60a64f7eae945a6e60b0e913"
+      },
+      "name": "Tackle"
+    },
+    {
+      "_id": {
+        "$oid": "60a64f7eae945a6e60b0e917"
+      },
+      "name": "Ember"
+    }
+  ]
+}

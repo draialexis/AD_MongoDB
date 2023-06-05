@@ -1,0 +1,56 @@
+{
+  "_id": {
+    "$oid": "60a64f7eae945a6e60b0e914"
+  },
+  "schemaVersion": 1,
+  "name": "Ash",
+  "dob": {
+    "$date": {
+      "$numberLong": "761598551000"
+    }
+  },
+  "wins": 100,
+  "losses": 50,
+  "pastOpponents": [
+    {
+      "$oid": "60a64f7eae945a6e60b0e915"
+    }
+  ],
+  "pokemongs": [
+    {
+      "_id": {
+        "$oid": "60a64f7eae945a6e60b0e911"
+      },
+      "nickname": "Sparky",
+      "species": "IVYSAUR"
+    }
+  ]
+}
+{
+  "_id": {
+    "$oid": "60a64f7eae945a6e60b0e915"
+  },
+  "schemaVersion": 1,
+  "name": "Brock",
+  "dob": {
+    "$date": {
+      "$numberLong": "761596551000"
+    }
+  },
+  "wins": 70,
+  "losses": 60,
+  "pastOpponents": [
+    {
+      "$oid": "60a64f7eae945a6e60b0e914"
+    }
+  ],
+  "pokemongs": [
+    {
+      "_id": {
+        "$oid": "60a64f7eae945a6e60b0e916"
+      },
+      "nickname": "Blazey",
+      "species": "CHARMANDER"
+    }
+  ]
+}

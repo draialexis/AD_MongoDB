@@ -1,0 +1,40 @@
+{
+  "_id": { "$oid":"60a64f7eae945a6e60b0e912" },
+  "schemaVersion": 1,
+  "name": "Vine Whip",
+  "power": 45,
+  "pp": 15,
+  "category": "PHYSICAL",
+  "accuracy": 100,
+  "type": {
+    "name": "GRASS",
+    "weakAgainst": ["FIRE"],
+    "effectiveAgainst": ["WATER", "GROUND"]
+  }
+}
+{
+  "_id": { "$oid":"60a64f7eae945a6e60b0e913" },
+  "schemaVersion": 2,
+  "name": "Tackle",
+  "power": 40,
+  "category": "PHYSICAL",
+  "accuracy": 100,
+  "type": {
+    "name": "NORMAL",
+    "weakAgainst": ["ROCK"],
+    "effectiveAgainst": []
+  }
+}
+{
+  "_id": { "$oid":"60a64f7eae945a6e60b0e917" },
+  "schemaVersion": 2,
+  "name": "Ember",
+  "power": 40,
+  "category": "SPECIAL",
+  "accuracy": 100,
+  "type": {
+    "name": "FIRE",
+    "weakAgainst": ["WATER", "GROUND"],
+    "effectiveAgainst": ["GRASS"]
+  }
+}

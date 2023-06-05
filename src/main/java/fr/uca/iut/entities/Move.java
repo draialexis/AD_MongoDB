@@ -1,9 +1,11 @@
 package fr.uca.iut.entities;
 
+import fr.uca.iut.entities.embedded.Type;
 import fr.uca.iut.utils.enums.MoveCategoryName;
 
-public class Move extends GenericEntity {
+public class Move extends GenericVersionedEntity {
     public static final String COLLECTION_NAME = "moves";
+    public static final Integer LATEST_SCHEMA_VERSION = 2;
 
     private String name;
     private MoveCategoryName category;
@@ -11,7 +13,8 @@ public class Move extends GenericEntity {
     private Integer accuracy;
     private Type type;
 
-    public Move() {}
+    public Move() {
+    }
 
     public String getName() {
         return name;

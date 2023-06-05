@@ -1,7 +1,11 @@
 package fr.uca.iut.services;
 
 import com.mongodb.lang.Nullable;
-import fr.uca.iut.entities.*;
+import fr.uca.iut.entities.Pokemong;
+import fr.uca.iut.entities.Trainer;
+import fr.uca.iut.entities.denormalized.PokemongMove;
+import fr.uca.iut.entities.denormalized.TrainerPokemong;
+import fr.uca.iut.entities.embedded.Type;
 import fr.uca.iut.repositories.PokemongRepository;
 import fr.uca.iut.utils.StringUtils;
 import fr.uca.iut.utils.enums.PokemongName;
@@ -36,81 +40,19 @@ public class PokemongService extends GenericService<Pokemong> {
     @Override
     public Pokemong addOne(@NotNull Pokemong pokemong) {
         Pokemong persistedPokemong = super.addOne(pokemong);
-
-        Trainer trainer = trainerService.getOneById(pokemong.getTrainer());
-        if (trainer != null) {
-            TrainerPokemong trainerPokemong = new TrainerPokemong();
-            trainerPokemong.setId(pokemong.getId());
-            trainerPokemong.setNickname(pokemong.getNickname());
-            trainerPokemong.setSpecies(pokemong.getSpecies());
-            trainer.getPokemongs()
-                   .add(trainerPokemong);
-            trainerService.updateOne(trainer);
-        }
-        return persistedPokemong;
-    }
-
-    @Override
-    public void deleteOneById(String id) {
-        Pokemong pokemong = getOneById(id);
-        if (pokemong != null && pokemong.getTrainer() != null) {
+        String trainerId = pokemong.getTrainer();
+        if (trainerId != null) {
             Trainer trainer = trainerService.getOneById(pokemong.getTrainer());
             if (trainer != null) {
-                trainer.getPokemongs()
-                       .removeIf(trainerPokemong -> trainerPokemong.getId()
-                                                                   .equals(id));
+                TrainerPokemong trainerPokemong = new TrainerPokemong();
+                trainerPokemong.setId(pokemong.getId());
+                trainerPokemong.setNickname(pokemong.getNickname());
+                trainerPokemong.setSpecies(pokemong.getSpecies());
+                trainer.addPokemong(trainerPokemong);
                 trainerService.updateOne(trainer);
             }
         }
-        super.deleteOneById(id);
-    }
-
-    @Override
-    @Nullable
-    public Pokemong updateOne(@NotNull Pokemong pokemong) {
-        Pokemong existingPokemong = pokemongRepository.findById(pokemong.getId());
-        if (existingPokemong != null) {
-            boolean nicknameChanged = !Objects.equals(existingPokemong.getNickname(), pokemong.getNickname());
-            boolean evoStageChanged = !Objects.equals(existingPokemong.getEvoStage(), pokemong.getEvoStage());
-            boolean evoTrackChanged = !Objects.equals(existingPokemong.getEvoTrack(), pokemong.getEvoTrack());
-
-            existingPokemong.setNickname(pokemong.getNickname());
-            existingPokemong.setDob(pokemong.getDob());
-            existingPokemong.setLevel(pokemong.getLevel());
-            existingPokemong.setPokedexId(pokemong.getPokedexId());
-            existingPokemong.setEvoStage(pokemong.getEvoStage());
-            existingPokemong.setEvoTrack(pokemong.getEvoTrack());
-            existingPokemong.setTrainer(pokemong.getTrainer());
-            existingPokemong.setTypes(pokemong.getTypes());
-            existingPokemong.setMoveSet(pokemong.getMoveSet());
-
-            pokemongRepository.persistOrUpdate(existingPokemong);
-
-            if (nicknameChanged || evoStageChanged || evoTrackChanged) {
-                Trainer trainer = trainerService.getOneById(existingPokemong.getTrainer());
-                if (trainer != null) {
-                    TrainerPokemong trainerPokemong = trainer.getPokemongs()
-                                                             .stream()
-                                                             .filter(tp -> tp.getId()
-                                                                             .equals(existingPokemong.getId()))
-                                                             .findFirst()
-                                                             .orElse(null);
-
-                    if (trainerPokemong != null) {
-                        if (nicknameChanged) {
-                            trainerPokemong.setNickname(existingPokemong.getNickname());
-                        }
-
-                        if (evoStageChanged || evoTrackChanged) {
-                            trainerPokemong.setSpecies(existingPokemong.getSpecies());
-                        }
-
-                        trainerService.updateOne(trainer);
-                    }
-                }
-            }
-        }
-        return existingPokemong;
+        return persistedPokemong;
     }
 
     @Override
@@ -140,19 +82,17 @@ public class PokemongService extends GenericService<Pokemong> {
             errors.add("pokemong evo track was null or invalid");
         }
 
-        List<Type> types = pokemong.getTypes();
+        Set<Type> types = pokemong.getTypes();
         if (types == null
-            || types.size() == 0
-            || types.size() > 2)
-        {
+                || types.size() == 0
+                || types.size() > 2) {
             errors.add("pokemong types was null or empty or had more than 2 types");
         }
 
         Set<PokemongMove> moveSet = pokemong.getMoveSet();
         if (moveSet == null) {
             errors.add("pokemong move set was null");
-        }
-        else {
+        } else {
             if (moveSet.size() == 0 || moveSet.size() > 4) {
                 errors.add("pokemong move set was empty or had more than 4 moves");
             }
@@ -171,8 +111,85 @@ public class PokemongService extends GenericService<Pokemong> {
             }
         }
 
+        if (pokemong.getSchemaVersion() == null ||
+                !Objects.equals(pokemong.getSchemaVersion(), Pokemong.LATEST_SCHEMA_VERSION)) {
+            errors.add(
+                    "pokemong schema version was null or not the latest version: " + Pokemong.LATEST_SCHEMA_VERSION);
+        }
+
         if (!errors.isEmpty()) {
             throw new NonValidEntityException("Validation errors: " + String.join(", ", errors));
+        }
+    }
+
+    @Override
+    public void deleteOneById(String id) {
+        Pokemong pokemong = getOneById(id);
+        if (pokemong != null && pokemong.getTrainer() != null) {
+            Trainer trainer = trainerService.getOneById(pokemong.getTrainer());
+            if (trainer != null) {
+                trainer.removePokemong(id);
+                trainerService.updateOne(trainer);
+            }
+        }
+        super.deleteOneById(id);
+    }
+
+    @Override
+    @Nullable
+    public Pokemong updateOne(@NotNull Pokemong pokemong) {
+        super.updateOne(pokemong);
+        Pokemong existingPokemong = pokemongRepository.findById(pokemong.getId());
+        if (existingPokemong != null) {
+            boolean nicknameChanged = !Objects.equals(existingPokemong.getNickname(), pokemong.getNickname());
+            boolean evoStageChanged = !Objects.equals(existingPokemong.getEvoStage(), pokemong.getEvoStage());
+            boolean evoTrackChanged = !Objects.equals(existingPokemong.getEvoTrack(), pokemong.getEvoTrack());
+
+            existingPokemong.setNickname(pokemong.getNickname());
+            existingPokemong.setDob(pokemong.getDob());
+            existingPokemong.setLevel(pokemong.getLevel());
+            existingPokemong.setPokedexId(pokemong.getPokedexId());
+            existingPokemong.setEvoStage(pokemong.getEvoStage());
+            existingPokemong.setEvoTrack(pokemong.getEvoTrack());
+            existingPokemong.setTrainer(pokemong.getTrainer());
+            existingPokemong.setTypes(pokemong.getTypes());
+            existingPokemong.setMoveSet(pokemong.getMoveSet());
+
+            pokemongRepository.persistOrUpdate(existingPokemong);
+
+            if (nicknameChanged || evoStageChanged || evoTrackChanged) {
+                updateTrainerPokemong(existingPokemong, nicknameChanged, evoStageChanged, evoTrackChanged);
+            }
+        }
+        return existingPokemong;
+    }
+
+    private void updateTrainerPokemong(
+            @NotNull Pokemong existingPokemong,
+            boolean nicknameChanged,
+            boolean evoStageChanged,
+            boolean evoTrackChanged
+    ) {
+        Trainer trainer = trainerService.getOneById(existingPokemong.getTrainer());
+        if (trainer != null) {
+            TrainerPokemong trainerPokemong =
+                    trainer.getPokemongs()
+                            .stream()
+                            .filter(tp -> tp.getId()
+                                    .equals(existingPokemong.getId()))
+                            .findFirst()
+                            .orElse(null);
+
+            if (trainerPokemong != null) {
+                if (nicknameChanged) {
+                    trainerPokemong.setNickname(existingPokemong.getNickname());
+                }
+
+                if (evoStageChanged || evoTrackChanged) {
+                    trainerPokemong.setSpecies(existingPokemong.getSpecies());
+                }
+                trainerService.updateOne(trainer);
+            }
         }
     }
 
@@ -190,13 +207,16 @@ public class PokemongService extends GenericService<Pokemong> {
         return repository.existsById(pokemongId);
     }
 
-    public void batchUpdatePokemongTrainers(List<TrainerPokemong> trainerPokemongs, @Nullable String trainerId) {
+    public void batchUpdatePokemongTrainers(@NotNull Set<TrainerPokemong> trainerPokemongs,
+                                            @Nullable String trainerId) {
+        List<Pokemong> pokemongsToUpdate = new ArrayList<>();
         for (TrainerPokemong trainerPokemong : trainerPokemongs) {
             Pokemong pokemong = getOneById(trainerPokemong.getId());
-            if (pokemong != null) {
+            if (pokemong != null && !Objects.equals(pokemong.getTrainer(), trainerId)) {
                 pokemong.setTrainer(trainerId);
-                updateOne(pokemong);
+                pokemongsToUpdate.add(pokemong);
             }
         }
+        updateAll(pokemongsToUpdate);
     }
 }

@@ -33,7 +33,7 @@ public class PokemongRepository extends GenericRepository<Pokemong> {
     public List<Pokemong> findByMove(String moveId) {
         Bson filter = Filters.elemMatch("moveSet", Filters.eq("_id", new ObjectId(moveId)));
         return getCollection().find(filter)
-                              .into(new ArrayList<>());
+                .into(new ArrayList<>());
     }
 
     @Override

@@ -310,6 +310,7 @@ components:
         - evoTrack
         - types
         - moveSet
+        - schemaVersion
       properties:
         nickname:
           type: string
@@ -347,6 +348,8 @@ components:
           maxItems: 4
           items:
             $ref: '#/components/schemas/PokemongMove'
+        schemaVersion:
+          $ref: '#/components/schemas/SchemaVersion'
 
     Move:
       type: object
@@ -356,6 +359,7 @@ components:
         - category
         - accuracy
         - type
+        - schemaVersion
       properties:
         name:
           type: string
@@ -370,6 +374,8 @@ components:
           minimum: 0
         type:
           $ref: '#/components/schemas/TypeName'
+        schemaVersion:
+          $ref: '#/components/schemas/SchemaVersion'
 
     Trainer:
       type: object
@@ -380,6 +386,7 @@ components:
         - losses
         - pastOpponents
         - pokemongs
+        - schemaVersion
       properties:
         name:
           type: string
@@ -402,6 +409,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TrainerPokemong'
+        schemaVersion:
+          $ref: '#/components/schemas/SchemaVersion'
 
     PokemongMove:
       type: object
@@ -430,6 +439,11 @@ components:
           nullable: true
         species:
           $ref: '#/components/schemas/PokemongName'
+
+    SchemaVersion:
+      type: integer
+      minimum: 1
+      description: must be >= 1, and furthermore must be == latest schema version
 
     MoveCategoryName:
       type: string

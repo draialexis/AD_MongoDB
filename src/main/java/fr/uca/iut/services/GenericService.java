@@ -17,8 +17,18 @@ public abstract class GenericService<T extends GenericEntity> {
     }
 
     public T addOne(@NotNull T entity) {
+        validateOne(entity);
         repository.persist(entity);
         return entity;
+    }
+
+    /**
+     * Override me and start with `super.validateOne(entity);`
+     */
+    public void validateOne(T entity) throws NonValidEntityException {
+        if (entity == null) {
+            throw new NonValidEntityException("entity was null");
+        }
     }
 
     @Nullable
@@ -37,15 +47,21 @@ public abstract class GenericService<T extends GenericEntity> {
         }
     }
 
-    @Nullable
-    public abstract T updateOne(@NotNull T entity);
-
     /**
-     * Override me and start with `super.validateOne(entity);`
+     * Override me
      */
-    public void validateOne(T entity) {
-        if (entity == null) {
-            throw new NonValidEntityException("entity was null");
+    @Nullable
+    public T updateOne(@NotNull T entity) {
+        validateOne(entity);
+        return entity;
+    }
+
+    public void updateAll(List<T> entities) {
+        if (!entities.isEmpty()) {
+            for (T entity : entities) {
+                validateOne(entity);
+            }
+            repository.updateAll(entities);
         }
     }
 }

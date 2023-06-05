@@ -9,6 +9,7 @@ import org.bson.codecs.CollectibleCodec;
 import org.bson.codecs.DecoderContext;
 import org.bson.codecs.EncoderContext;
 import org.bson.types.ObjectId;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class GenericCodec<T extends GenericEntity> implements CollectibleCodec<T> {
 
@@ -27,12 +28,12 @@ public abstract class GenericCodec<T extends GenericEntity> implements Collectib
     }
 
     @Override
-    public boolean documentHasId(T document) {
+    public boolean documentHasId(@NotNull T document) {
         return document.getId() != null;
     }
 
     @Override
-    public BsonValue getDocumentId(T document) {
+    public BsonValue getDocumentId(@NotNull T document) {
         return new BsonObjectId(new ObjectId(document.getId()));
     }
 

@@ -13,6 +13,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class MoveService extends GenericService<Move> {
@@ -25,41 +27,6 @@ public class MoveService extends GenericService<Move> {
     @PostConstruct
     public void init() {
         setRepository(moveRepository);
-    }
-
-    @Override
-    public void deleteOneById(String id) {
-        super.deleteOneById(id);
-        List<Pokemong> pokemongs = pokemongService.findByMove(id);
-        for (Pokemong pokemong : pokemongs) {
-            pokemong.removeMove(id);
-            pokemongService.updateOne(pokemong);
-        }
-    }
-
-    @Override
-    @Nullable
-    public Move updateOne(@NotNull Move move) {
-        Move existingMove = moveRepository.findById(move.getId());
-        if (existingMove != null) {
-            if (!existingMove.getName()
-                             .equals(move.getName()))
-            {
-                existingMove.setName(move.getName());
-                List<Pokemong> pokemongs = pokemongService.findByMove(move.getId());
-                for (Pokemong pokemong : pokemongs) {
-                    pokemong.updateMove(move.getId(), move.getName());
-                    pokemongService.updateOne(pokemong);
-                }
-            }
-
-            existingMove.setPower(move.getPower());
-            existingMove.setCategory(move.getCategory());
-            existingMove.setAccuracy(move.getAccuracy());
-            existingMove.setType(move.getType());
-            moveRepository.persistOrUpdate(existingMove);
-        }
-        return existingMove;
     }
 
     @Override
@@ -89,9 +56,85 @@ public class MoveService extends GenericService<Move> {
             errors.add("move type was null or invalid");
         }
 
+        if (move.getSchemaVersion() == null || !Objects.equals(move.getSchemaVersion(), Move.LATEST_SCHEMA_VERSION)) {
+            errors.add("move schema version was null or not the latest version: " + Move.LATEST_SCHEMA_VERSION);
+        }
+
         if (!errors.isEmpty()) {
             throw new NonValidEntityException("Validation errors: " + String.join(", ", errors));
         }
+    }
+
+    @Nullable
+    @Override
+    public Move getOneById(String id) {
+        return migrateToV2(super.getOneById(id));
+    }
+
+    @Override
+    public List<Move> getAll() {
+        return super.getAll()
+                .stream()
+                .map(this::migrateToV2)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteOneById(String id) {
+        List<Pokemong> pokemongs = pokemongService.findByMove(id);
+        List<Pokemong> pokemongsToUpdate = new ArrayList<>();
+        for (Pokemong pokemong : pokemongs) {
+            pokemong.removeMove(id);
+            pokemongsToUpdate.add(pokemong);
+        }
+        pokemongService.updateAll(pokemongsToUpdate);
+        super.deleteOneById(id);
+    }
+
+    @Override
+    @Nullable
+    public Move updateOne(@NotNull Move move) {
+        super.updateOne(move);
+        Move existingMove = moveRepository.findById(move.getId());
+        if (existingMove != null) {
+            if (!existingMove.getName().equals(move.getName())) {
+                existingMove.setName(move.getName());
+                batchUpdatePokemongTrainers(move);
+            }
+
+            existingMove.setPower(move.getPower());
+            existingMove.setCategory(move.getCategory());
+            existingMove.setAccuracy(move.getAccuracy());
+            existingMove.setType(move.getType());
+            moveRepository.persistOrUpdate(existingMove);
+        }
+        return existingMove;
+    }
+
+    private void batchUpdatePokemongTrainers(@NotNull Move move) {
+        List<Pokemong> pokemongs = pokemongService.findByMove(move.getId());
+        List<Pokemong> pokemongsToUpdate = new ArrayList<>();
+        for (Pokemong pokemong : pokemongs) {
+            pokemong.updateMove(move.getId(), move.getName());
+            pokemongsToUpdate.add(pokemong);
+        }
+        pokemongService.updateAll(pokemongsToUpdate);
+    }
+
+    /**
+     * We want to migrate the documents incrementally, so we upgrade the
+     * schema version if it is less than the current schema version,
+     * and then save the updated document back to the database.
+     *
+     * @param move the Move found by the repository
+     * @return the Move(V2) based on the Move from the repository
+     */
+    private Move migrateToV2(Move move) {
+        if (move != null && move.getSchemaVersion() < 2) {
+            move.setSchemaVersion(2);
+            moveRepository.persistOrUpdate(move);
+        }
+        return move;
     }
 
     public boolean existsById(String moveId) {

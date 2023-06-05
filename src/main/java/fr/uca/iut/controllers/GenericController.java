@@ -22,24 +22,23 @@ public abstract class GenericController<T extends GenericEntity> {
             T entity = service.getOneById(id);
             if (entity != null) {
                 return Response.ok(entity)
-                               .build();
-            }
-            else {
+                        .build();
+            } else {
                 return Response.status(Response.Status.NOT_FOUND)
-                               .entity("Entity not found for id: " + id)
-                               .build();
+                        .entity("Entity not found for id: " + id)
+                        .build();
             }
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST)
-                           .entity("Invalid id format: " + id)
-                           .build();
+                    .entity(e.getMessage())
+                    .build();
         }
     }
 
     @GET
     public Response getAll() {
         return Response.ok(service.getAll())
-                       .build();
+                .build();
     }
 
     @POST
@@ -47,17 +46,16 @@ public abstract class GenericController<T extends GenericEntity> {
     public Response createOne(T entity) {
 
         try {
-            service.validateOne(entity);
             T newEntity = service.addOne(entity);
 
             return Response.status(Response.Status.CREATED)
-                           .entity(newEntity)
-                           .build();
+                    .entity(newEntity)
+                    .build();
 
         } catch (NonValidEntityException e) {
             return Response.status(Response.Status.BAD_REQUEST)
-                           .entity(e.getMessage())
-                           .build();
+                    .entity(e.getMessage())
+                    .build();
         }
     }
 
@@ -66,28 +64,22 @@ public abstract class GenericController<T extends GenericEntity> {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateOne(@PathParam("id") String id, T entity) {
         try {
-            service.validateOne(entity);
             entity.setId(id);
             T updatedEntity = service.updateOne(entity);
 
             if (updatedEntity != null) {
                 return Response.status(Response.Status.OK)
-                               .entity(updatedEntity)
-                               .build();
-            }
-            else {
+                        .entity(updatedEntity)
+                        .build();
+            } else {
                 return Response.status(Response.Status.NOT_FOUND)
-                               .entity("Entity not found for id: " + id)
-                               .build();
+                        .entity("Entity not found for id: " + id)
+                        .build();
             }
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | NonValidEntityException e) {
             return Response.status(Response.Status.BAD_REQUEST)
-                           .entity("Invalid id format: " + id)
-                           .build();
-        } catch (NonValidEntityException e) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                           .entity(e.getMessage())
-                           .build();
+                    .entity(e.getMessage())
+                    .build();
         }
     }
 
@@ -97,12 +89,12 @@ public abstract class GenericController<T extends GenericEntity> {
         try {
             service.deleteOneById(id);
             return Response.ok()
-                           .build();
+                    .build();
 
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST)
-                           .entity("Invalid id format: " + id)
-                           .build();
+                    .entity(e.getMessage())
+                    .build();
         }
     }
 }

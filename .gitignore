@@ -85,3 +85,4 @@ gradle-app.setting
 # Others
 docs/todos.md
 /src/test/resources/application.properties
+/docs/sample-dataset/load_data.sh

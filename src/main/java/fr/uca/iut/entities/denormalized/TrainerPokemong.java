@@ -1,6 +1,7 @@
-package fr.uca.iut.entities;
+package fr.uca.iut.entities.denormalized;
 
 import com.mongodb.lang.Nullable;
+import fr.uca.iut.entities.GenericEntity;
 import fr.uca.iut.utils.enums.PokemongName;
 
 public class TrainerPokemong extends GenericEntity {
@@ -9,7 +10,8 @@ public class TrainerPokemong extends GenericEntity {
 
     private PokemongName species;
 
-    public TrainerPokemong() {}
+    public TrainerPokemong() {
+    }
 
     @Nullable
     public String getNickname() {
