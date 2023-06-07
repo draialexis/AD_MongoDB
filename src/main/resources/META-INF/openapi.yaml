@@ -341,7 +341,7 @@ components:
           minItems: 1
           maxItems: 2
           items:
-            $ref: '#/components/schemas/TypeName'
+            $ref: '#/components/schemas/Type'
         moveSet:
           type: array
           minItems: 1
@@ -373,7 +373,7 @@ components:
           type: integer
           minimum: 0
         type:
-          $ref: '#/components/schemas/TypeName'
+          $ref: '#/components/schemas/Type'
         schemaVersion:
           $ref: '#/components/schemas/SchemaVersion'
 
@@ -411,6 +411,25 @@ components:
             $ref: '#/components/schemas/TrainerPokemong'
         schemaVersion:
           $ref: '#/components/schemas/SchemaVersion'
+
+    Type:
+      type: object
+      required:
+        - name
+        - weakAgainst
+        - effectiveAgainst
+      properties:
+        name:
+          $ref: '#/components/schemas/TypeName'
+        weakAgainst:
+          type: array
+          items:
+            $ref: '#/components/schemas/TypeName'
+        effectiveAgainst:
+          type: array
+          items:
+            $ref: '#/components/schemas/TypeName'
+
 
     PokemongMove:
       type: object
