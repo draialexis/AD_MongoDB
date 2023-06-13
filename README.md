@@ -1,5 +1,19 @@
 # PoKeMoNg
 
+  * [About](#about)
+    + [🗂️DCM](#dcm)
+    + [🧬UML Class diagram](#uml-class-diagram)
+    + [🗺NoSQL Schema Versioning Strategy](#nosql-schema-versioning-strategy)
+      - [Schema Versioning Pattern](#schema-versioning-pattern)
+      - [Incremental Document Migration](#incremental-document-migration)
+  * [Prep steps](#prep-steps)
+    + [♨️Java version](#java-version)
+    + [🔐Database connection](#database-connection)
+  * [Running the application in dev mode](#running-the-application-in-dev-mode)
+    + [🏴‍☠️SwaggerUI](#swaggerui)
+    + [🩺API testing tools](#api-testing-tools)
+    + [📱Front end (later)](#front-end-later)
+
 This is a [Quarkus](https://quarkus.io/) / [MongoDB](https://mongodb.com/) app for educational purposes.
 
 Instructions are [here](https://clientserveur-courses.clubinfo-clermont.fr/Notation.html) for reference.
@@ -14,15 +28,82 @@ This application is a RESTful service designed to emulate a basic `Pokemong` man
 perform
 CRUD operations on `Pokemongs`, `Trainers`, `Moves`, and `Types`.
 
-### 🗂️ DCM
+### 🗂️DCM
 
 <img src="./docs/mcd.png" alt="Data Concept Model" title="Data Concept Model">
 
-### 🧬 UML Class diagram
+### 🧬UML Class diagram
 
-<img src="./docs/nosql_uml.png" alt="UML Class Diagram" title="UML Class Diagram">
+```mermaid
+classDiagram
 
-### NoSQL Schema Versioning Strategy
+class Trainer {
+  + id: ObjectId
+  + name: string
+  + dob: date
+  + wins: int
+  + losses: int
+}
+
+class Pokemong {
+  + id: ObjectId
+  + nickname: string?
+  + dob: date
+  + level: int
+  + pokedexId: int
+  + evoStage: int
+  + evoTrack: PokemongName[]
+}
+
+class Move {
+  + id: ObjectId
+  + name: string
+  + category: MoveCategoryName
+  + power: int
+  + accuracy: int
+}
+
+class Type {
+  + id: ObjectId
+  + name: TypeName
+  + weakAgainst: TypeName[]
+  + effectiveAgainst: TypeName[]
+}
+
+class TypeName {
+    <<enumeration>>
+  + FIRE
+  + WATER
+  + ...
+}
+
+class PokemongName {
+    <<enumeration>>
+  + BULBASAUR
+  + IVYSAUR
+  + ...
+}
+
+class MoveCategoryName {
+    <<enumeration>>
+  + PHYSICAL
+  + SPECIAL
+  + STATUS
+}
+
+Trainer --> "0..*" Trainer: pastOpponents
+Trainer --> "0..*" Pokemong: pokemongs
+Pokemong --> "0..1" Trainer: trainer
+Pokemong --> "0..4" Move: moveSet
+Pokemong --> "1..2" Type: types
+Move --> Type: type
+
+Type ..> TypeName
+Pokemong ..> PokemongName
+Move ..> MoveCategoryName
+```
+
+### 🗺NoSQL Schema Versioning Strategy
 
 This application uses MongoDB, a NoSQL database, which provides flexibility in our data model. While this flexibility
 has
@@ -73,7 +154,7 @@ However, note that this strategy increases write operations to the database, whi
 
 ## Prep steps
 
-### ♨️ Java version
+### ♨️Java version
 
 This project is set up to use `Java 17`.
 
@@ -94,7 +175,7 @@ settings to use `JDK 17` for `Gradle` tasks
 
 </details>
 
-### 🔐 Database connection
+### 🔐Database connection
 
 Note that the DB connection properties are not included -- your `src/main/resources/application.properties` should look
 like this :
@@ -131,7 +212,7 @@ You can run the application in dev mode using:
 
 ## API testing
 
-### 🧪 Sample dataset
+### 🧪Sample dataset
 
 You can find a sample dataset at `docs/sample-dataset/`. Each JSON file contains a collection.
 
@@ -140,7 +221,7 @@ To load the `moves` collection into an existing MongoDB cluster, you may use [Mo
 mongoimport --uri=mongodb+srv://<username>:<password>@<cluster>.<node>.mongodb.net/<databasename> --collection=moves --file=./docs/sample-dataset/moves.json
 ```
 
-### 🏴‍☠️ SwaggerUI
+### 🏴‍☠️SwaggerUI
 
 Thanks to this project's OpenAPI specs, you can explore the API in a lot of ways.
 A popular choice is SwaggerUI -- after you run the app, just go to http://localhost:8080/q/swagger-ui and have fun.
@@ -148,14 +229,14 @@ A popular choice is SwaggerUI -- after you run the app, just go to http://localh
 ⚠️ Unfortunately, Swagger or Quarkus or SmallRye adds the field `id` to all request examples, but in fact ***you should
 NOT include id** when you POST or UPDATE a new document.* The app takes care of it for you. Same thing for the field `species` with `Pokemong` documents.
 
-### 🩺 API testing tools
+### 🩺API testing tools
 
 You can use an API testing tool such as [Postman](https://www.postman.com/)
 or [Insomnia](https://insomnia.rest/) to test this app.
 
 If you use Postman, you can even import `docs/postman_collection.json`, designed to work with the `🧪 Sample dataset`.
 
-### 📱 Front end (later)
+### 📱Front end (later)
 
 Moving forward, the front end part of this app -- a different project -- might also come into play for trying out this
 API.

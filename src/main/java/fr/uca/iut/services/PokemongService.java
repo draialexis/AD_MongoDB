@@ -93,8 +93,8 @@ public class PokemongService extends GenericService<Pokemong> {
         if (moveSet == null) {
             errors.add("pokemong move set was null");
         } else {
-            if (moveSet.size() == 0 || moveSet.size() > 4) {
-                errors.add("pokemong move set was empty or had more than 4 moves");
+            if (moveSet.size() > 4) {
+                errors.add("pokemong move set had more than 4 moves");
             }
             for (PokemongMove move : moveSet) {
                 String moveId = move.getId();

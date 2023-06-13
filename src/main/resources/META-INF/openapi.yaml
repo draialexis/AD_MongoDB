@@ -344,7 +344,6 @@ components:
             $ref: '#/components/schemas/Type'
         moveSet:
           type: array
-          minItems: 1
           maxItems: 4
           items:
             $ref: '#/components/schemas/PokemongMove'

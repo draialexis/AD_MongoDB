@@ -64,7 +64,7 @@
         * => referencing
     - [x] pokemongs.types: one-to-few [1;2]
         * => embedding
-    - [x] pokemongs.moveSet: one-to-few [1;4] but will also need to be queried independently
+    - [x] pokemongs.moveSet: one-to-few [0;4] but will also need to be queried independently
         * => referencing + denormalizing on  "name"
 - Move
     - [x] moves.type: one-to-one [1;1]
