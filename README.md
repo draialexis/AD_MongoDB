@@ -1,18 +1,23 @@
 # PoKeMoNg
 
-  * [About](#about)
-    + [🗂️DCM](#dcm)
-    + [🧬UML Class diagram](#uml-class-diagram)
-    + [🗺NoSQL Schema Versioning Strategy](#nosql-schema-versioning-strategy)
-      - [Schema Versioning Pattern](#schema-versioning-pattern)
-      - [Incremental Document Migration](#incremental-document-migration)
-  * [Prep steps](#prep-steps)
-    + [♨️Java version](#java-version)
-    + [🔐Database connection](#database-connection)
-  * [Running the application in dev mode](#running-the-application-in-dev-mode)
-    + [🏴‍☠️SwaggerUI](#swaggerui)
-    + [🩺API testing tools](#api-testing-tools)
-    + [📱Front end (later)](#front-end-later)
+- [About](#about)
+    - [🗂️DCM](#dcm)
+    - [🧬UML Class diagram](#uml-class-diagram)
+    - [🗺NoSQL Schema Versioning Strategy](#nosql-schema-versioning-strategy)
+        - [Schema Versioning Pattern](#schema-versioning-pattern)
+        - [Incremental Document Migration](#incremental-document-migration)
+    - [🐕‍🦺Services](#services)
+- [Prep steps](#prep-steps)
+    - [♨️Java version](#java-version)
+    - [🔐Database connection](#database-connection)
+- [Running the application in dev mode](#running-the-application-in-dev-mode)
+- [API testing](#api-testing)
+    - [🧪Sample dataset](#sample-dataset)
+    - [🩺API testing tools](#api-testing-tools)
+    - [📱Front end](#front-end)
+    - [🏴‍☠️SwaggerUI](#swaggerui)
+- [Known limitations](#known-limitations)
+    - [🔀Types are left at the user's mercy](#types-are-left-at-the-users-mercy)
 
 This is a [Quarkus](https://quarkus.io/) / [MongoDB](https://mongodb.com/) app for educational purposes.
 
@@ -26,81 +31,115 @@ The application is developed using the Quarkus framework and uses MongoDB as its
 
 This application is a RESTful service designed to emulate a basic `Pokemong` management system. It allows users to
 perform
-CRUD operations on `Pokemongs`, `Trainers`, `Moves`, and `Types`.
+CRUD operations on `Pokemongs`, `Trainers`, and `Moves`.
 
 ### 🗂️DCM
 
+Let's cover the entities and relationships in this Data Concept Model:
+
+#### `Trainer`
+
+These are the individuals who capture and train `pokemongs`. They can engage in battles with other `trainers.`
+
+* a `trainer` has fought between 0 and many `trainers`
+* a `trainer` owns between 0 and many `pokemongs`
+
+#### `Pokemong`
+
+These are the creatures that `trainers` capture and train. They can be trained or wild.
+
+* a `pokemong` is owned by 0 or 1 `trainer`
+* a `pokemong` has 1 or 2 `types`
+* a `pokemong` knows between 0 and 4 `moves`,
+
+#### `Move`
+
+These are the abilities or actions that a `pokemong` can perform. This covers the strategic aspects of battles, as
+different `moves` can have different effects and powers depending on the type of the `pokemong` and the `move`.
+
+* a `move` can be known by between 0 and zillions of `pokemongs`
+* a `move` has 1 and only 1 `type`
+
+#### `Type`
+
+These define the elements or categories that a `pokemong` or a `move` can belong to.
+
+* a `type` can define between 0 and zillions of `pokemongs`
+* a `type` can define between 0 and zillions of `moves`
+
 <img src="./docs/mcd.png" alt="Data Concept Model" title="Data Concept Model">
+
+Looking at things from the point of view of entities, instead of relationships
 
 ### 🧬UML Class diagram
 
 ```mermaid
 classDiagram
 
-class Trainer {
-  + id: ObjectId
-  + name: string
-  + dob: date
-  + wins: int
-  + losses: int
-}
+    class Trainer {
+        + id: ObjectId
+        + name: string
+        + dob: date
+        + wins: int
+        + losses: int
+    }
 
-class Pokemong {
-  + id: ObjectId
-  + nickname: string?
-  + dob: date
-  + level: int
-  + pokedexId: int
-  + evoStage: int
-  + evoTrack: PokemongName[]
-}
+    class Pokemong {
+        + id: ObjectId
+        + nickname: string?
+        + dob: date
+        + level: int
+        + pokedexId: int
+        + evoStage: int
+        + evoTrack: PokemongName[]
+    }
 
-class Move {
-  + id: ObjectId
-  + name: string
-  + category: MoveCategoryName
-  + power: int
-  + accuracy: int
-}
+    class Move {
+        + id: ObjectId
+        + name: string
+        + category: MoveCategoryName
+        + power: int
+        + accuracy: int
+    }
 
-class Type {
-  + id: ObjectId
-  + name: TypeName
-  + weakAgainst: TypeName[]
-  + effectiveAgainst: TypeName[]
-}
+    class Type {
+        + id: ObjectId
+        + name: TypeName
+        + weakAgainst: TypeName[]
+        + effectiveAgainst: TypeName[]
+    }
 
-class TypeName {
-    <<enumeration>>
-  + FIRE
-  + WATER
-  + ...
-}
+    class TypeName {
+        <<enumeration>>
+        + FIRE
+        + WATER
+        + ...
+    }
 
-class PokemongName {
-    <<enumeration>>
-  + BULBASAUR
-  + IVYSAUR
-  + ...
-}
+    class PokemongName {
+        <<enumeration>>
+        + BULBASAUR
+        + IVYSAUR
+        + ...
+    }
 
-class MoveCategoryName {
-    <<enumeration>>
-  + PHYSICAL
-  + SPECIAL
-  + STATUS
-}
+    class MoveCategoryName {
+        <<enumeration>>
+        + PHYSICAL
+        + SPECIAL
+        + STATUS
+    }
 
-Trainer --> "0..*" Trainer: pastOpponents
-Trainer --> "0..*" Pokemong: pokemongs
-Pokemong --> "0..1" Trainer: trainer
-Pokemong --> "0..4" Move: moveSet
-Pokemong --> "1..2" Type: types
-Move --> Type: type
+    Trainer --> "0..*" Trainer: pastOpponents
+    Trainer --> "0..*" Pokemong: pokemongs
+    Pokemong --> "0..1" Trainer: trainer
+    Pokemong --> "0..4" Move: moveSet
+    Pokemong --> "1..2" Type: types
+    Move --> Type: type
 
-Type ..> TypeName
-Pokemong ..> PokemongName
-Move ..> MoveCategoryName
+    Type ..> TypeName
+    Pokemong ..> PokemongName
+    Move ..> MoveCategoryName
 ```
 
 ### 🗺NoSQL Schema Versioning Strategy
@@ -148,9 +187,113 @@ This strategy allows for graceful schema evolution in a NoSQL environment. Inste
 migrated at once, which can be a time-consuming operation for large collections, it enables incremental document
 migration. This approach also helps to avoid downtime during schema migration, as the application continues to function
 correctly regardless of the document version. As documents are read, they are updated to the current schema version,
-allowing the schema migration to happen gradually over time. 
+allowing the schema migration to happen gradually over time.
 
 However, note that this strategy increases write operations to the database, which could affect application performance.
+
+### 🐕‍🦺Services
+
+Each entity (`Pokemong`, `Trainer`, `Move`) in the application has a corresponding service class. These service
+classes are responsible for handling the business logic related to their respective entities. They interact with the
+database through their associated repositories, performing CRUD operations.
+
+All service classes inherit from a `GenericService` class, which provides the following methods:
+
+* addOne(T entity): Adds a new entity to the database, after validating it.
+* getOneById(String id): Retrieves a single entity from the database by its ID.
+* getAll(): Retrieves all entities of a certain type from the database.
+* deleteOneById(String id): Deletes an entity from the database by its ID.
+* updateOne(T entity): Updates an existing entity in the database. This method is meant to be overridden in child
+  service
+  classes to provide the specific update logic for each type of entity.
+* updateAll(List<T> entities): Updates all entities in a given list. Each entity is validated before updating.
+
+These methods allow the application to perform all the basic CRUD operations on any type of entity. The specific logic
+for each type of entity (like how to validate a Pokemong, how to update a Move, etc.) is provided in the child service
+classes that inherit from `GenericService`.
+
+Many business rules were applied, so let's use just one for an example here: when a `trainer` gets updated, it can mean
+consequences for any number of `pokemongs`, as this commented code from inside `TrainerService.UpdateOne()` explains
+
+```java
+// all old pokemongs who are not there anymore lose their trainer reference
+pokemongService.batchUpdatePokemongTrainers(
+        oldPokemongs.stream()
+        .filter(tp->!newPokemongs.contains(tp))
+        .collect(Collectors.toSet()),
+        null);
+// if this trainer gained a pokemong, that pokemong's ex-trainer if any needs to lose said pokemong
+        transferNewlyArrivedTrainerPokemongs(oldPokemongs,newPokemongs);
+// all new pokemongs who were not there before gain this trainer's reference
+        pokemongService.batchUpdatePokemongTrainers(
+        newPokemongs.stream()
+        .filter(tp->!oldPokemongs.contains(tp))
+        .collect(Collectors.toSet()),
+        existingTrainer.getId()
+        );
+```
+
+This diagram attempts to show the relationship between services in this API
+
+```mermaid
+classDiagram
+    class GenericService~T~ {
+        -GenericRepository~T~ repository
+        +setRepository(GenericRepository~T~ repository)
+        +addOne(T entity): T
+        +validateOne(T entity)
+        +getOneById(String id): T
+        +getAll(): List~T~
+        +deleteOneById(String id)
+        +updateOne(T entity): T
+        +updateAll(List~T~ entities)
+    }
+
+    class MoveService {
+        -MoveRepository moveRepository
+        -PokemongService pokemongService
+        +init()
+        +validateOne(Move move)
+        +getOneById(String id): Move
+        +getAll(): List~Move~
+        +deleteOneById(String id)
+        +updateOne(Move move): Move
+        +existsById(String moveId): boolean
+        -batchUpdatePokemongTrainers(Move move)
+        -migrateToV2(Move move): Move
+    }
+
+    class TrainerService {
+        -TrainerRepository trainerRepository
+        -PokemongService pokemongService
+        +init()
+        +addOne(Trainer trainer): Trainer
+        +validateOne(Trainer trainer)
+        +deleteOneById(String id)
+        +updateOne(Trainer trainer): Trainer
+        -transferNewlyArrivedTrainerPokemongs(...)
+        }
+
+    class PokemongService {
+        -PokemongRepository pokemongRepository
+        -MoveService moveService
+        -TrainerService trainerService
+        +init()
+        +addOne(Pokemong pokemong): Pokemong
+        +validateOne(Pokemong pokemong)
+        +deleteOneById(String id)
+        +updateOne(Pokemong pokemong): Pokemong
+        +existsById(String pokemongId): boolean
+        -updateTrainerPokemong(...)
+        +findByMove(String id): List~Pokemong~
+        +isEvoValid(String id, PokemongName species): boolean
+        +batchUpdatePokemongTrainers(...)
+  }
+
+    GenericService <|-- "T <- Move" MoveService
+    GenericService <|-- "T <- Trainer" TrainerService
+    GenericService <|-- "T <- Pokemong" PokemongService
+```
 
 ## Prep steps
 
@@ -214,29 +357,61 @@ You can run the application in dev mode using:
 
 ### 🧪Sample dataset
 
-You can find a sample dataset at `docs/sample-dataset/`. Each JSON file contains a collection.
+<details><summary>🏫 If you are the corrector</summary>
 
-To load the `moves` collection into an existing MongoDB cluster, you may use [MongoDB Shell ("mongosh")](https://www.mongodb.com/docs/mongodb-shell/) to run
+Please navigate to the root of this project in a terminal and run the provided `load_data.sh` script.
+
+If the script wasn't provided, that was a mistake. Sorry. Please request them to the owner of this repo, or follow the
+alternate
+procedure below.
+
+</details> 
+
+<details><summary>👥 If you are another user or developer</summary>
+
+You can find a sample dataset at `data/sample-dataset/`. Each JSON file contains a collection.
+
+For example, to load the `moves` collection into an existing MongoDB cluster, you may
+use [MongoDB Shell ("mongosh")](https://www.mongodb.com/docs/mongodb-shell/) to run
+
 ```shell script
-mongoimport --uri=mongodb+srv://<username>:<password>@<cluster>.<node>.mongodb.net/<databasename> --collection=moves --file=./docs/sample-dataset/moves.json
+mongoimport --uri=mongodb+srv://<username>:<password>@<cluster>.<node>.mongodb.net/<databasename> --collection=moves --file=./data/sample-dataset/moves.json
 ```
 
-### 🏴‍☠️SwaggerUI
+You can then do the same, but changing `moves` for `pokemongs`, and then `trainers`
 
-Thanks to this project's OpenAPI specs, you can explore the API in a lot of ways.
-A popular choice is SwaggerUI -- after you run the app, just go to http://localhost:8080/q/swagger-ui and have fun.
-
-⚠️ Unfortunately, Swagger or Quarkus or SmallRye adds the field `id` to all request examples, but in fact ***you should
-NOT include id** when you POST or UPDATE a new document.* The app takes care of it for you. Same thing for the field `species` with `Pokemong` documents.
+</details> 
 
 ### 🩺API testing tools
 
 You can use an API testing tool such as [Postman](https://www.postman.com/)
 or [Insomnia](https://insomnia.rest/) to test this app.
 
-If you use Postman, you can even import `docs/postman_collection.json`, designed to work with the `🧪 Sample dataset`.
+If you use Postman, you can even import `data/postman_collection.json`, designed to work with the `🧪 Sample dataset`.
 
-### 📱Front end (later)
+### 📱Front end
 
-Moving forward, the front end part of this app -- a different project -- might also come into play for trying out this
-API.
+A corresponding [front-end app](https://github.com/draialexis/pokemong_app) comes into play for trying out this API.
+
+⚠️ That only includes the `Move` entity, so [`Postman`](#api-testing-tools) seems like your best option at the moment.
+
+### 🏴‍☠️SwaggerUI
+
+Thanks to this project's OpenAPI specs, you can explore the API in a lot of ways.
+A popular choice is SwaggerUI -- after you run the app, just go to http://localhost:8080/q/swagger-ui and have fun.
+
+⚠️ Swagger or Quarkus or SmallRye adds the field `id` to all request examples, but in fact
+***you should NOT include id**
+when you POST or UPDATE a new document.* The app takes care of it for you. Same thing for the field `species`
+with `Pokemong` documents.
+
+## Known limitations
+
+### 🔀Types are left at the user's mercy
+
+This API doesn't ensure that *a `Move` can't be both effective against a type and weak against that type*. It probably
+should.
+
+But then again, this API doesn't deal with types very much at all anyway. Users are free to create all sorts of weird
+types within `pokemongs` and `moves`, such as a Pikachu with `GRASS` type effective against `ROCK`, who has an Ember
+move with `GRASS` type weak against `ROCK` and effective against `FLYING`...
