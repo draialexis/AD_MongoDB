@@ -17,7 +17,6 @@ import java.util.List;
 @ApplicationScoped
 public class PokemongRepository extends GenericRepository<Pokemong> {
 
-    // FIX?ME
     /**
      * Warns that "Unsatisfied dependency: no bean matches the injection point"
      * but the app works

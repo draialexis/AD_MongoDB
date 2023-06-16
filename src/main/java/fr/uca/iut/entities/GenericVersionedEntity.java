@@ -1,11 +1,10 @@
 package fr.uca.iut.entities;
 
 /**
- * The strategy for incrementing the schema version number is simple.
- * <br><br>
- * `schemaVersion` will have to start at 1, and need to be incremented by one at each schema change.
- * <br><br>
- * Every change to the schema needs to involve the schema version number being incremented.
+ * Abstract entity class that extends GenericEntity to include versioning of the schema.
+ * The strategy for incrementing the schema version number is simple: `schemaVersion` will have to start at 1,
+ * and need to be incremented by one at each schema change. Every change to the schema needs to involve
+ * the schema version number being incremented.
  */
 public abstract class GenericVersionedEntity extends GenericEntity {
 

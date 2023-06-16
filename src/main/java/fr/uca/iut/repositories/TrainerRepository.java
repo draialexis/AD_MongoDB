@@ -11,7 +11,6 @@ import jakarta.inject.Inject;
 @ApplicationScoped
 public class TrainerRepository extends GenericRepository<Trainer> {
 
-    // FIX?ME
     /**
      * Warns that "Unsatisfied dependency: no bean matches the injection point"
      * but the app works

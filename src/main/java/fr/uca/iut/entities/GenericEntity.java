@@ -4,6 +4,11 @@ import org.bson.codecs.pojo.annotations.BsonId;
 
 import java.util.Objects;
 
+/**
+ * Abstract entity class that provides common properties and methods for all entities in the system.
+ * Entities extending this class will automatically have an ID field, along with associated getter and setter,
+ * and overridden hashCode and equals methods based on the ID field.
+ */
 public abstract class GenericEntity {
 
     @BsonId
