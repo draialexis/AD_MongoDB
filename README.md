@@ -431,9 +431,7 @@ quarkus.mongodb.database=<database>
 
 <details><summary>🏫 If you are the corrector</summary>
 
-To be able to use this app, please update `application.properties` with the provided database secrets.
-
-If none were provided, that was a mistake. Sorry. Please request them to the owner of this repo.
+To be able to use this app, please place the provided `application-dev.properties` inside `src > main > resources`.
 
 </details> 
 
@@ -465,8 +463,7 @@ The database should already be populated with the sample dataset.
 However, if you want to reload that dataset, please navigate to the root of this project in a terminal and run
 the provided `load_data.sh` script.
 
-If the script wasn't provided, that was a mistake. Sorry. Please request them to the owner of this repo, or follow the
-alternate procedure below.
+Or you may follow the alternate procedure below.
 
 </details> 
 
