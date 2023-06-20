@@ -88,7 +88,7 @@ public abstract class GenericController<T extends GenericEntity> {
     /**
      * Updates an existing entity.
      *
-     * @param id The ID of the entity to update.
+     * @param id     The ID of the entity to update.
      * @param entity The updated entity.
      * @return A Response object containing the updated entity, or an error message if the entity is not found or not valid.
      */

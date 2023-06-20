@@ -7,6 +7,9 @@
         - [Schema Versioning Pattern](#schema-versioning-pattern)
         - [Incremental Document Migration](#incremental-document-migration)
     - [🐕‍🦺Services](#services)
+    - [🌺Special requests](#special-requests)
+        - [`Pokemong` by nickname](#pokemong-by-nickname)
+        - [`Pokemong` in date interval](#pokemong-in-date-interval)
 - [Prep steps](#prep-steps)
     - [♨️Java version](#java-version)
     - [🔐Database connection](#database-connection)
@@ -272,7 +275,7 @@ classDiagram
         +deleteOneById(String id)
         +updateOne(Trainer trainer): Trainer
         -transferNewlyArrivedTrainerPokemongs(...)
-        }
+    }
 
     class PokemongService {
         -PokemongRepository pokemongRepository
@@ -288,12 +291,26 @@ classDiagram
         +findByMove(String id): List~Pokemong~
         +isEvoValid(String id, PokemongName species): boolean
         +batchUpdatePokemongTrainers(...)
-  }
+    }
 
     GenericService <|-- "T <- Move" MoveService
     GenericService <|-- "T <- Trainer" TrainerService
     GenericService <|-- "T <- Pokemong" PokemongService
 ```
+
+### 🌺Special requests
+
+This API goes a little bit beyond basic CRUD operations.
+
+#### `Pokemong` by nickname
+
+Using a MongoDB filter with a regex, `pokemongs` are searchable by nickname with the URL `/pokemong/nickname/{nickname}`
+where `{nickname}` is a partial, case-insensitive search term.
+
+#### `Pokemong` in date interval
+
+Users can also use the route `pokemong/dob/{startDate}/{endDate}` to search for
+`pokemongs` who where born within that interval (bounds included).
 
 ## Prep steps
 

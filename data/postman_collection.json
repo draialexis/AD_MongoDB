@@ -256,6 +256,49 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "Get all pkmn by nickname",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/pokemong/nickname/sparky",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "pokemong",
+                "nickname",
+                "sparky"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Gat all pkmn by date interval",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/pokemong/dob/1995-01-01/1999-01-01",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "pokemong",
+                "dob",
+                "1995-01-01",
+                "1999-01-01"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },

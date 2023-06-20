@@ -6,7 +6,7 @@
   "name": "Ash",
   "dob": {
     "$date": {
-      "$numberLong": "761598551000"
+      "$numberLong": "661598551000"
     }
   },
   "wins": 100,
@@ -34,7 +34,7 @@
   "name": "Brock",
   "dob": {
     "$date": {
-      "$numberLong": "761596551000"
+      "$numberLong": "561596551000"
     }
   },
   "wins": 70,

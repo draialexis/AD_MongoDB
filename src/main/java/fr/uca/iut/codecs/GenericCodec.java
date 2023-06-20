@@ -22,8 +22,8 @@ public abstract class GenericCodec<T extends GenericEntity> implements Collectib
      * Encodes the entity into BSON.
      * This method must be overridden by subclasses.
      *
-     * @param writer The BsonWriter to write the BSON.
-     * @param entity The entity to encode.
+     * @param writer         The BsonWriter to write the BSON.
+     * @param entity         The entity to encode.
      * @param encoderContext The context for encoding.
      */
     @Override
@@ -79,7 +79,7 @@ public abstract class GenericCodec<T extends GenericEntity> implements Collectib
      * Decodes a BSON document into an entity.
      * This method must be overridden by subclasses.
      *
-     * @param reader The BsonReader from which to read the BSON.
+     * @param reader         The BsonReader from which to read the BSON.
      * @param decoderContext The context for decoding.
      * @return The decoded entity.
      */

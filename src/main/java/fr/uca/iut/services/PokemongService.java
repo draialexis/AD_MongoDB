@@ -15,6 +15,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -207,6 +208,10 @@ public class PokemongService extends GenericService<Pokemong> {
         return repository.existsById(pokemongId);
     }
 
+    public List<Pokemong> findByNickname(String nickname) {
+        return pokemongRepository.findByNickname(nickname);
+    }
+
     public void batchUpdatePokemongTrainers(@NotNull Set<TrainerPokemong> trainerPokemongs,
                                             @Nullable String trainerId) {
         List<Pokemong> pokemongsToUpdate = new ArrayList<>();
@@ -219,4 +224,9 @@ public class PokemongService extends GenericService<Pokemong> {
         }
         updateAll(pokemongsToUpdate);
     }
+
+    public List<Pokemong> findByDateOfBirthInterval(LocalDate startDate, LocalDate endDate) {
+        return pokemongRepository.findByDateOfBirthInterval(startDate, endDate);
+    }
+
 }

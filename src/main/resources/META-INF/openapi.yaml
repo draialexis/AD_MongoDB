@@ -73,6 +73,58 @@ paths:
         '400':
           description: Invalid ID format
 
+  /pokemong/nickname/{nickname}:
+
+    get:
+      summary: Get Pokemongs by nickname
+      parameters:
+        - name: nickname
+          in: path
+          required: true
+          description: The nickname of the Pokemong. It can be a partial nickname. The match is case-insensitive and ignores leading and trailing spaces.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pokemong'
+
+  /pokemong/dob/{startDate}/{endDate}:
+
+    get:
+      summary: Get Pokemongs born within a certain date interval
+      parameters:
+        - name: startDate
+          in: path
+          required: true
+          description: The start of the date interval (inclusive)
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: path
+          required: true
+          description: The end of the date interval (inclusive)
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pokemong'
+        '400':
+          description: Invalid date format
+
   /pokemong:
 
     get:
