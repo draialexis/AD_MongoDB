@@ -2,15 +2,27 @@
 
 - [About](#about)
     - [🗂️DCM](#dcm)
+        - [`Trainer`](#trainer)
+        - [`Pokemong`](#pokemong)
+        - [`Move`](#move)
+        - [`Type`](#type)
     - [🧬UML Class diagram](#uml-class-diagram)
     - [🗺NoSQL Schema Versioning Strategy](#nosql-schema-versioning-strategy)
         - [Schema Versioning Pattern](#schema-versioning-pattern)
         - [Incremental Document Migration](#incremental-document-migration)
+    - [📇Indexes](#indexes)
+        - [`moves` collection](#moves-collection)
+        - [`pokemongs` collection](#pokemongs-collection)
+        - [`trainers` collection](#trainers-collection)
     - [🐕‍🦺Services](#services)
     - [🌺Special requests](#special-requests)
         - [`Pokemong` by nickname](#pokemong-by-nickname)
         - [`Pokemong` in date interval](#pokemong-in-date-interval)
     - [🦚Aggregation pipeline](#aggregation-pipeline)
+    - [👔Some business rules](#some-business-rules)
+        - [`Move` CRUD cascade](#move-crud-cascade)
+        - [`Pokemong` CRUD cascade](#pokemong-crud-cascade)
+        - [`Trainer` CRUD cascade](#trainer-crud-cascade)
 - [Prep steps](#prep-steps)
     - [♨️Java version](#java-version)
     - [🔐Database connection](#database-connection)
@@ -46,15 +58,21 @@ Let's cover the entities and relationships in this Data Concept Model:
 These are the individuals who capture and train `pokemongs`. They can engage in battles with other `trainers.`
 
 * a `trainer` has fought between 0 and many `trainers`
+    * we will use *referencing*, since this is a reflexive relationship
 * a `trainer` owns between 0 and many `pokemongs`
+    * we will use *referencing with denormalizing*, since `pokemongs` have lifecycles of their own
 
 #### `Pokemong`
 
 These are the creatures that `trainers` capture and train. They can be trained or wild.
 
 * a `pokemong` is owned by 0 or 1 `trainer`
+    * we will use *referencing*, since `trainers` have lifecycles of their own, but no denormalizing, since no queries
+      need that
 * a `pokemong` has 1 or 2 `types`
-* a `pokemong` knows between 0 and 4 `moves`,
+    * we will use *embedding*, since `types` don't have lifecycles of their own
+* a `pokemong` knows between 0 and 4 `moves`
+    * we will use *referencing with denormalizing*, since `moves` have lifecycles of their own
 
 #### `Move`
 
@@ -62,20 +80,24 @@ These are the abilities or actions that a `pokemong` can perform. This covers th
 different `moves` can have different effects and powers depending on the type of the `pokemong` and the `move`.
 
 * a `move` can be known by between 0 and zillions of `pokemongs`
+    * we will let `pokemongs` refer to `moves`, and not the other way around
 * a `move` has 1 and only 1 `type`
+    * we will use *embedding*, since `types` don't have lifecycles of their own
 
 #### `Type`
 
 These define the elements or categories that a `pokemong` or a `move` can belong to.
 
 * a `type` can define between 0 and zillions of `pokemongs`
+    * see [`Pokemong`](#pokemong)
 * a `type` can define between 0 and zillions of `moves`
+    * see [`Move`](#move)
 
 <img src="./docs/mcd.png" alt="Data Concept Model" title="Data Concept Model">
 
-Looking at things from the point of view of entities, instead of relationships
-
 ### 🧬UML Class diagram
+
+Omitting some details, our entities look like this:
 
 ```mermaid
 classDiagram
@@ -195,6 +217,39 @@ allowing the schema migration to happen gradually over time.
 
 However, note that this strategy increases write operations to the database, which could affect application performance.
 
+### 📇Indexes
+
+Various indexes were created for fields that would often be queried in a dashboard situation. If there is an additional
+reason, it will be specified below.
+
+Unless otherwise specified, please consider indexes to be full, and ascending.
+
+#### `moves` collection
+
+In the front-end app, these are queried both in the detail screen and in the list screen.
+
+* `name`
+* `power`: Descending, because users are more likely to sort them in that order.
+* `type`
+
+#### `pokemongs` collection
+
+* `nickname`: This field already has a dedicated endpoint for a nickname search filter.
+* `dob`: Descending, because users are more likely to sort them in that order.
+* `evoStage`: "Species" is calculated as `evoTrack[evoStage]`, and would often be queried.
+* `evoTrack`: See `evoStage`. Yes, it's an array, but it's a one-to-few relationship.
+* `trainer`: Partial index, to avoid indexing wild pokemongs there.
+* `types`: It's an array, but it's a one-to-few relationship.
+
+#### `trainers` collection
+
+It was tempting to index `pastOpponents` and `pokemongs` in the `trainers` collection, but these arrays
+could grow indefinitely, and the indexes may grow so large that they wouldn't fit in a server's RAM anymore.
+
+* `name`
+* `wins`: Descending, because users are more likely to sort them in that order for rankings.
+* `losses`: Descending, because users are more likely to sort them in that order for rankings.
+
 ### 🐕‍🦺Services
 
 Each entity (`Pokemong`, `Trainer`, `Move`) in the application has a corresponding service class. These service
@@ -203,39 +258,19 @@ database through their associated repositories, performing CRUD operations.
 
 All service classes inherit from a `GenericService` class, which provides the following methods:
 
-* addOne(T entity): Adds a new entity to the database, after validating it.
-* getOneById(String id): Retrieves a single entity from the database by its ID.
-* getAll(): Retrieves all entities of a certain type from the database.
-* deleteOneById(String id): Deletes an entity from the database by its ID.
-* updateOne(T entity): Updates an existing entity in the database. This method is meant to be overridden in child
-  service
-  classes to provide the specific update logic for each type of entity.
-* updateAll(List<T> entities): Updates all entities in a given list. Each entity is validated before updating.
+* `addOne(T entity)`: Adds a new entity to the database, after validating it.
+* `getOneById(String id)`: Retrieves a single entity from the database by its ID.
+* `getAll()`: Retrieves all entities of a certain type from the database.
+* `deleteOneById(String id)`: Deletes an entity from the database by its ID.
+* `updateOne(T entity)`: Updates an existing entity in the database. This method is meant to be overridden in child
+  service classes to provide the specific update logic for each type of entity.
+* `updateAll(List<T> entities)`: Updates all entities in a given list. Each entity is validated before updating.
 
 These methods allow the application to perform all the basic CRUD operations on any type of entity. The specific logic
-for each type of entity (like how to validate a Pokemong, how to update a Move, etc.) is provided in the child service
-classes that inherit from `GenericService`.
+for each type of entity (like how to validate a `pokemong`, how to update a `move`, etc.) is provided in the child
+service classes that inherit from `GenericService`.
 
-Many business rules were applied, so let's use just one for an example here: when a `trainer` gets updated, it can mean
-consequences for any number of `pokemongs`, as this commented code from inside `TrainerService.UpdateOne()` explains
-
-```java
-// all old pokemongs who are not there anymore lose their trainer reference
-pokemongService.batchUpdatePokemongTrainers(
-        oldPokemongs.stream()
-        .filter(tp->!newPokemongs.contains(tp))
-        .collect(Collectors.toSet()),
-        null);
-// if this trainer gained a pokemong, that pokemong's ex-trainer if any needs to lose said pokemong
-        transferNewlyArrivedTrainerPokemongs(oldPokemongs,newPokemongs);
-// all new pokemongs who were not there before gain this trainer's reference
-        pokemongService.batchUpdatePokemongTrainers(
-        newPokemongs.stream()
-        .filter(tp->!oldPokemongs.contains(tp))
-        .collect(Collectors.toSet()),
-        existingTrainer.getId()
-        );
-```
+Many business rules were applied, which can be browsed [here](#some-business-rules).
 
 This diagram attempts to show the relationship between services in this API
 
@@ -337,6 +372,30 @@ As an example of a potential output:
 ]
 ```
 
+### 👔Some business rules
+
+#### `Move` CRUD cascade
+
+* When you delete a `move`, it also gets deleted from any `pokemong`'s `moveSet`.
+* Since `pokemongMove` is denormalized on the `name` field, that field also gets updated when a `move`'s `name` is
+  updated.
+
+#### `Pokemong` CRUD cascade
+
+* When a `pokemong` is created, the new `pokemong`'s information is also added to the `pokemongs` array of any
+  associated `trainer` documents.
+* When a `pokemong` is deleted, the `pokemongs` array in the associated `trainer` documents also has that specific
+  `pokemong` removed.
+* Since `trainerPokemong` is denormalized on the `nickname` and `species` fields, those fields also get updated when
+  a `pokemong`'s `nickname` is updated, or when a `pokemong` evolves.
+
+#### `Trainer` CRUD cascade
+
+* When a `trainer` is created, the new `trainer`'s information is also updated in the `trainer` field of any associated
+  `pokemong` documents. Since a `pokemong` can only belong to one `trainer` at a time, that may mean removing it from
+  one to give it to the other.
+* When a `trainer` is deleted, the `trainer` field in the associated `pokemong` documents is also removed.
+
 ## Prep steps
 
 ### ♨️Java version
@@ -372,7 +431,7 @@ quarkus.mongodb.database=<database>
 
 <details><summary>🏫 If you are the corrector</summary>
 
-To be able to use this app, update `application.properties` with the provided database secrets.
+To be able to use this app, please update `application.properties` with the provided database secrets.
 
 If none were provided, that was a mistake. Sorry. Please request them to the owner of this repo.
 

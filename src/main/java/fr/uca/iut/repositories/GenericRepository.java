@@ -2,6 +2,7 @@ package fr.uca.iut.repositories;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.ReplaceOneModel;
 import com.mongodb.client.model.ReplaceOptions;
 import com.mongodb.client.model.WriteModel;
@@ -56,7 +57,7 @@ public abstract class GenericRepository<T extends GenericEntity> {
      *
      * @return The MongoDB collection of entities of type T.
      */
-    protected abstract MongoCollection<T> getCollection();
+    public abstract MongoCollection<T> getCollection();
 
     /**
      * Inserts an entity into the collection.
@@ -132,4 +133,14 @@ public abstract class GenericRepository<T extends GenericEntity> {
         Document query = new Document("_id", new ObjectId(id));
         return getCollection().countDocuments(query) > 0;
     }
+
+    /**
+     * @return the MongoDB database
+     */
+    @NotNull
+    public MongoDatabase getMongoDatabase() {
+        return mongoClient.getDatabase(DB_NAME);
+    }
+
+    public abstract void createIndexes();
 }

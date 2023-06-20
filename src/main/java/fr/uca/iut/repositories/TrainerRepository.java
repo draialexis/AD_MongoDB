@@ -3,6 +3,7 @@ package fr.uca.iut.repositories;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Indexes;
 import fr.uca.iut.entities.Trainer;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -24,8 +25,15 @@ public class TrainerRepository extends GenericRepository<Trainer> {
     }
 
     @Override
-    protected MongoCollection<Trainer> getCollection() {
+    public MongoCollection<Trainer> getCollection() {
         MongoDatabase db = mongoClient.getDatabase(DB_NAME);
         return db.getCollection(Trainer.COLLECTION_NAME, Trainer.class);
+    }
+
+    @Override
+    public void createIndexes() {
+        getCollection().createIndex(Indexes.ascending("name"));
+        getCollection().createIndex(Indexes.descending("wins"));
+        getCollection().createIndex(Indexes.descending("losses"));
     }
 }

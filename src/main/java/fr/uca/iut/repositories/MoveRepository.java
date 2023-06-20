@@ -3,6 +3,7 @@ package fr.uca.iut.repositories;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Indexes;
 import fr.uca.iut.entities.Move;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -24,8 +25,15 @@ public class MoveRepository extends GenericRepository<Move> {
     }
 
     @Override
-    protected MongoCollection<Move> getCollection() {
+    public MongoCollection<Move> getCollection() {
         MongoDatabase db = mongoClient.getDatabase(DB_NAME);
         return db.getCollection(Move.COLLECTION_NAME, Move.class);
+    }
+
+    @Override
+    public void createIndexes() {
+        getCollection().createIndex(Indexes.ascending("name"));
+        getCollection().createIndex(Indexes.descending("power"));
+        getCollection().createIndex(Indexes.ascending("type"));
     }
 }

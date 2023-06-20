@@ -1,427 +1,447 @@
 {
-  "info": {
-    "_postman_id": "11aa7a76-83a4-4b92-940f-528e29b66df8",
-    "name": "PoKeMoNg",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "25802734"
-  },
-  "item": [
-    {
-      "name": "move",
-      "item": [
-        {
-          "name": "Create 1 move",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json",
-                "type": "text"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"name\": \"Bubble beam\",\r\n    \"category\": \"PHYSICAL\",\r\n    \"power\": 10,\r\n    \"accuracy\": 85,\r\n    \"type\": \r\n    {\r\n        \"name\": \"WATER\",\r\n        \"weakAgainst\": [\"GRASS\"],\r\n        \"effectiveAgainst\": [\"FIRE\", \"GROUND\"]\r\n    },\r\n    \"schemaVersion\": 2\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:8080/move",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "move"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get all moves",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:8080/move",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "move"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get 1 move",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:8080/move/60a64f7eae945a6e60b0e917",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "move",
-                "60a64f7eae945a6e60b0e917"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Update 1 move",
-          "request": {
-            "method": "PUT",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"schemaVersion\": 2,\r\n    \"name\": \"Ember UPDATED\",\r\n    \"category\": \"SPECIAL\",\r\n    \"power\": 40,\r\n    \"accuracy\": 100,\r\n    \"type\": {\r\n        \"name\": \"FIRE\",\r\n        \"weakAgainst\": [\r\n            \"WATER\",\r\n            \"GROUND\"\r\n        ],\r\n        \"effectiveAgainst\": [\r\n            \"GRASS\"\r\n        ]\r\n    }\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:8080/move/60a64f7eae945a6e60b0e917",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "move",
-                "60a64f7eae945a6e60b0e917"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Delete 1 move",
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:8080/move/60a64f7eae945a6e60b0e913",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "move",
-                "60a64f7eae945a6e60b0e913"
-              ]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "pokemong",
-      "item": [
-        {
-          "name": "Create 1 pkmn",
-          "protocolProfileBehavior": {
-            "disabledSystemHeaders": {
-              "content-type": true
-            }
-          },
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"nickname\": \"Blappity-bloop\",\r\n    \"dob\": \"2023-05-07\",\r\n    \"level\": 1,\r\n    \"pokedexId\": 172,\r\n    \"evoStage\": 1,\r\n    \"evoTrack\": [\"PICHU\", \"PIKACHU\", \"RAICHU\"],\r\n    \"types\": [\r\n        {\r\n            \"name\": \"ELECTRIC\",\r\n            \"weakAgainst\": [\"GROUND\", \"ROCK\"],\r\n            \"effectiveAgainst\": [\"WATER\", \"FLYING\"]\r\n        }\r\n    ],\r\n    \"moveSet\": \r\n    [\r\n        {\r\n            \"id\": \"60a64f7eae945a6e60b0e917\",\r\n            \"name\": \"Ember\"\r\n        }\r\n    ],\r\n    \"schemaVersion\": 1\r\n}"
-            },
-            "url": {
-              "raw": "http://localhost:8080/pokemong",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "pokemong"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get all pkmn",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:8080/pokemong",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "pokemong"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get 1 pkmn",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:8080/pokemong/60a64f7eae945a6e60b0e911",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "pokemong",
-                "60a64f7eae945a6e60b0e911"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Update 1 pkmn",
-          "request": {
-            "method": "PUT",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"schemaVersion\": 1,\n    \"nickname\": \"Sparky UPDATED\",\n    \"dob\": \"1994-02-18\",\n    \"level\": 15,\n    \"pokedexId\": 1,\n    \"evoStage\": 1,\n    \"evoTrack\": [\n        \"BULBASAUR\",\n        \"IVYSAUR\",\n        \"VENUSAUR\"\n    ],\n    \"trainer\": \"60a64f7eae945a6e60b0e914\",\n    \"types\": [\n        {\n            \"name\": \"GRASS\",\n            \"weakAgainst\": [\n                \"FIRE\"\n            ],\n            \"effectiveAgainst\": [\n                \"WATER\",\n                \"GROUND\"\n            ]\n        }\n    ],\n    \"moveSet\": [\n        {\n            \"id\": \"60a64f7eae945a6e60b0e912\",\n            \"name\": \"Vine Whip\"\n        }\n    ]\n}"
-            },
-            "url": {
-              "raw": "http://localhost:8080/pokemong/60a64f7eae945a6e60b0e911",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "pokemong",
-                "60a64f7eae945a6e60b0e911"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Delete 1 pkmn",
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:8080/pokemong/60a64f7eae945a6e60b0e916",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "pokemong",
-                "60a64f7eae945a6e60b0e916"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get all pkmn by nickname",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:8080/pokemong/nickname/sparky",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "pokemong",
-                "nickname",
-                "sparky"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Gat all pkmn by date interval",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:8080/pokemong/dob/1995-01-01/1999-01-01",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "pokemong",
-                "dob",
-                "1995-01-01",
-                "1999-01-01"
-              ]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "trainer",
-      "item": [
-        {
-          "name": "Create 1 trainer",
-          "request": {
-            "method": "POST",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"schemaVersion\": 1,\r\n    \"name\": \"Bloop\",\r\n    \"dob\": \"1997-02-18\",\r\n    \"wins\": 1,\r\n    \"losses\": 50,\r\n    \"pastOpponents\": [\r\n        \"60a64f7eae945a6e60b0e915\"\r\n    ],\r\n    \"pokemongs\": [\r\n        {\r\n            \"id\": \"60a64f7eae945a6e60b0e911\",\r\n            \"nickname\": \"Sparky UPDATED\",\r\n            \"species\": \"IVYSAUR\"\r\n        }\r\n    ]\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:8080/trainer",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "trainer"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get all trainers",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:8080/trainer",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "trainer"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get 1 trainer",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:8080/trainer/60a64f7eae945a6e60b0e914",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "trainer",
-                "60a64f7eae945a6e60b0e914"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Update 1 trainer",
-          "request": {
-            "method": "PUT",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"schemaVersion\": 1,\r\n    \"name\": \"Brock\",\r\n    \"dob\": \"1994-02-18\",\r\n    \"wins\": 60,\r\n    \"losses\": 60,\r\n    \"pastOpponents\": [\r\n        \"60a64f7eae945a6e60b0e914\"\r\n    ],\r\n    \"pokemongs\": [\r\n        {\r\n            \"id\": \"60a64f7eae945a6e60b0e911\",\r\n            \"nickname\": \"Sparky UPDATED\",\r\n            \"species\": \"IVYSAUR\"\r\n        }\r\n    ]\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "http://localhost:8080/trainer/60a64f7eae945a6e60b0e915",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "trainer",
-                "60a64f7eae945a6e60b0e915"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Delete 1 trainer",
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:8080/trainer/60a64f7eae945a6e60b0e914",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "trainer",
-                "60a64f7eae945a6e60b0e914"
-              ]
-            }
-          },
-          "response": []
-        }
-      ]
-    }
-  ]
+	"info": {
+		"_postman_id": "11aa7a76-83a4-4b92-940f-528e29b66df8",
+		"name": "PoKeMoNg",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25802734"
+	},
+	"item": [
+		{
+			"name": "move",
+			"item": [
+				{
+					"name": "Create 1 move",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Bubble beam\",\r\n    \"category\": \"PHYSICAL\",\r\n    \"power\": 10,\r\n    \"accuracy\": 85,\r\n    \"type\": \r\n    {\r\n        \"name\": \"WATER\",\r\n        \"weakAgainst\": [\"GRASS\"],\r\n        \"effectiveAgainst\": [\"FIRE\", \"GROUND\"]\r\n    },\r\n    \"schemaVersion\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/move",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"move"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all moves",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/move",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"move"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get 1 move",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/move/60a64f7eae945a6e60b0e917",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"move",
+								"60a64f7eae945a6e60b0e917"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update 1 move",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"schemaVersion\": 2,\r\n    \"name\": \"Ember UPDATED\",\r\n    \"category\": \"SPECIAL\",\r\n    \"power\": 40,\r\n    \"accuracy\": 100,\r\n    \"type\": {\r\n        \"name\": \"FIRE\",\r\n        \"weakAgainst\": [\r\n            \"WATER\",\r\n            \"GROUND\"\r\n        ],\r\n        \"effectiveAgainst\": [\r\n            \"GRASS\"\r\n        ]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/move/60a64f7eae945a6e60b0e917",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"move",
+								"60a64f7eae945a6e60b0e917"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete 1 move",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/move/60a64f7eae945a6e60b0e913",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"move",
+								"60a64f7eae945a6e60b0e913"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "pokemong",
+			"item": [
+				{
+					"name": "Create 1 pkmn",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nickname\": \"Blappity-bloop\",\r\n    \"dob\": \"2023-05-07\",\r\n    \"level\": 1,\r\n    \"pokedexId\": 172,\r\n    \"evoStage\": 1,\r\n    \"evoTrack\": [\"PICHU\", \"PIKACHU\", \"RAICHU\"],\r\n    \"types\": [\r\n        {\r\n            \"name\": \"ELECTRIC\",\r\n            \"weakAgainst\": [\"GROUND\", \"ROCK\"],\r\n            \"effectiveAgainst\": [\"WATER\", \"FLYING\"]\r\n        }\r\n    ],\r\n    \"moveSet\": \r\n    [\r\n        {\r\n            \"id\": \"60a64f7eae945a6e60b0e917\",\r\n            \"name\": \"Ember\"\r\n        }\r\n    ],\r\n    \"schemaVersion\": 1\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/pokemong",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pokemong"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all pkmn",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/pokemong",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pokemong"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get 1 pkmn",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/pokemong/60a64f7eae945a6e60b0e911",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pokemong",
+								"60a64f7eae945a6e60b0e911"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update 1 pkmn",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"schemaVersion\": 1,\n    \"nickname\": \"Sparky UPDATED\",\n    \"dob\": \"1994-02-18\",\n    \"level\": 15,\n    \"pokedexId\": 1,\n    \"evoStage\": 1,\n    \"evoTrack\": [\n        \"BULBASAUR\",\n        \"IVYSAUR\",\n        \"VENUSAUR\"\n    ],\n    \"trainer\": \"60a64f7eae945a6e60b0e914\",\n    \"types\": [\n        {\n            \"name\": \"GRASS\",\n            \"weakAgainst\": [\n                \"FIRE\"\n            ],\n            \"effectiveAgainst\": [\n                \"WATER\",\n                \"GROUND\"\n            ]\n        }\n    ],\n    \"moveSet\": [\n        {\n            \"id\": \"60a64f7eae945a6e60b0e912\",\n            \"name\": \"Vine Whip\"\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/pokemong/60a64f7eae945a6e60b0e911",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pokemong",
+								"60a64f7eae945a6e60b0e911"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete 1 pkmn",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/pokemong/60a64f7eae945a6e60b0e916",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pokemong",
+								"60a64f7eae945a6e60b0e916"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get many pkmn by nickname",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/pokemong/nickname/sparky",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pokemong",
+								"nickname",
+								"sparky"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get many pkmn by date interval",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/pokemong/dob/1995-01-01/1999-01-01",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pokemong",
+								"dob",
+								"1995-01-01",
+								"1999-01-01"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get mapping of all pkmn count by evo stage",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/pokemong/count-by-evo-stage",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pokemong",
+								"count-by-evo-stage"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "trainer",
+			"item": [
+				{
+					"name": "Create 1 trainer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"schemaVersion\": 1,\r\n    \"name\": \"Bloop\",\r\n    \"dob\": \"1997-02-18\",\r\n    \"wins\": 1,\r\n    \"losses\": 50,\r\n    \"pastOpponents\": [\r\n        \"60a64f7eae945a6e60b0e915\"\r\n    ],\r\n    \"pokemongs\": [\r\n        {\r\n            \"id\": \"60a64f7eae945a6e60b0e911\",\r\n            \"nickname\": \"Sparky UPDATED\",\r\n            \"species\": \"IVYSAUR\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/trainer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"trainer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all trainers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/trainer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"trainer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get 1 trainer",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/trainer/60a64f7eae945a6e60b0e914",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"trainer",
+								"60a64f7eae945a6e60b0e914"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update 1 trainer",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"schemaVersion\": 1,\r\n    \"name\": \"Brock\",\r\n    \"dob\": \"1994-02-18\",\r\n    \"wins\": 60,\r\n    \"losses\": 60,\r\n    \"pastOpponents\": [\r\n        \"60a64f7eae945a6e60b0e914\"\r\n    ],\r\n    \"pokemongs\": [\r\n        {\r\n            \"id\": \"60a64f7eae945a6e60b0e911\",\r\n            \"nickname\": \"Sparky UPDATED\",\r\n            \"species\": \"IVYSAUR\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/trainer/60a64f7eae945a6e60b0e915",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"trainer",
+								"60a64f7eae945a6e60b0e915"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete 1 trainer",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/trainer/60a64f7eae945a6e60b0e914",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"trainer",
+								"60a64f7eae945a6e60b0e914"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
 }

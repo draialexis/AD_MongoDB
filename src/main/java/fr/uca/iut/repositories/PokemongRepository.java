@@ -3,10 +3,7 @@ package fr.uca.iut.repositories;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Accumulators;
-import com.mongodb.client.model.Aggregates;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Projections;
+import com.mongodb.client.model.*;
 import fr.uca.iut.entities.Pokemong;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -14,7 +11,6 @@ import jakarta.inject.Inject;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -45,14 +41,9 @@ public class PokemongRepository extends GenericRepository<Pokemong> {
     }
 
     @Override
-    protected MongoCollection<Pokemong> getCollection() {
+    public MongoCollection<Pokemong> getCollection() {
         MongoDatabase db = getMongoDatabase();
         return db.getCollection(Pokemong.COLLECTION_NAME, Pokemong.class);
-    }
-
-    @NotNull
-    private MongoDatabase getMongoDatabase() {
-        return mongoClient.getDatabase(DB_NAME);
     }
 
     /**
@@ -108,8 +99,18 @@ public class PokemongRepository extends GenericRepository<Pokemong> {
                 ))
         );
 
-        MongoCollection<Document> collection = getMongoDatabase().getCollection(getCollection().getNamespace().getCollectionName());
-        return collection.aggregate(pipeline, Document.class).into(new ArrayList<>());
+        return getCollection().aggregate(pipeline, Document.class).into(new ArrayList<>());
+    }
+
+    @Override
+    public void createIndexes() {
+        getCollection().createIndex(Indexes.ascending("nickname"));
+        getCollection().createIndex(Indexes.descending("dob"));
+        getCollection().createIndex(Indexes.ascending("evoStage"));
+        getCollection().createIndex(Indexes.ascending("evoTrack"));
+        getCollection().createIndex(Indexes.ascending("types"));
+        IndexOptions indexOptions = new IndexOptions().partialFilterExpression(Filters.exists("trainer", true));
+        getCollection().createIndex(Indexes.ascending("trainer"), indexOptions);
     }
 
 }
