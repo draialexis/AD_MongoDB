@@ -13,6 +13,7 @@ import fr.uca.iut.utils.exceptions.NonValidEntityException;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import org.bson.Document;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
@@ -208,10 +209,6 @@ public class PokemongService extends GenericService<Pokemong> {
         return repository.existsById(pokemongId);
     }
 
-    public List<Pokemong> findByNickname(String nickname) {
-        return pokemongRepository.findByNickname(nickname);
-    }
-
     public void batchUpdatePokemongTrainers(@NotNull Set<TrainerPokemong> trainerPokemongs,
                                             @Nullable String trainerId) {
         List<Pokemong> pokemongsToUpdate = new ArrayList<>();
@@ -225,8 +222,17 @@ public class PokemongService extends GenericService<Pokemong> {
         updateAll(pokemongsToUpdate);
     }
 
+    public List<Pokemong> findByNickname(String nickname) {
+        return pokemongRepository.findByNickname(nickname);
+    }
+
     public List<Pokemong> findByDateOfBirthInterval(LocalDate startDate, LocalDate endDate) {
         return pokemongRepository.findByDateOfBirthInterval(startDate, endDate);
     }
+
+    public List<Document> countPokemongsByEvoStage() {
+        return pokemongRepository.countPokemongsByEvoStage();
+    }
+
 
 }

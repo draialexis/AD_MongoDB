@@ -3,17 +3,23 @@ package fr.uca.iut.repositories;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Accumulators;
+import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Projections;
 import fr.uca.iut.entities.Pokemong;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -40,8 +46,13 @@ public class PokemongRepository extends GenericRepository<Pokemong> {
 
     @Override
     protected MongoCollection<Pokemong> getCollection() {
-        MongoDatabase db = mongoClient.getDatabase(DB_NAME);
+        MongoDatabase db = getMongoDatabase();
         return db.getCollection(Pokemong.COLLECTION_NAME, Pokemong.class);
+    }
+
+    @NotNull
+    private MongoDatabase getMongoDatabase() {
+        return mongoClient.getDatabase(DB_NAME);
     }
 
     /**
@@ -75,6 +86,30 @@ public class PokemongRepository extends GenericRepository<Pokemong> {
         );
         return getCollection().find(filter)
                 .into(new ArrayList<>());
+    }
+
+    /**
+     * Counts the number of Pokemongs grouped by their evolution stage.
+     *
+     * @return A list of MongoDB Documents, each containing the evolution stage
+     * ('evoStage') and the count of Pokemongs at that stage.
+     */
+    public List<Document> countPokemongsByEvoStage() {
+        List<Bson> pipeline = Arrays.asList(
+                Aggregates.group("$evoStage", Accumulators.sum("count", 1)),
+                // "evoStage" becomes "_id" here
+                Aggregates.project(Projections.fields(
+                        Projections.excludeId(),
+                        // we discard that "_id" field
+                        Projections.computed("evoStage", "$_id"),
+                        // but we add it back in after renaming it "evoStage"
+                        Projections.include("count")
+                        // and of course we still want to keep the count
+                ))
+        );
+
+        MongoCollection<Document> collection = getMongoDatabase().getCollection(getCollection().getNamespace().getCollectionName());
+        return collection.aggregate(pipeline, Document.class).into(new ArrayList<>());
     }
 
 }

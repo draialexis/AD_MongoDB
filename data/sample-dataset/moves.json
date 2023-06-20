@@ -38,3 +38,59 @@
     "effectiveAgainst": ["GRASS"]
   }
 }
+{
+  "_id": { "$oid":"60a64f7eae945a6e60b0e919" },
+  "schemaVersion": 2,
+  "name": "Twineedle",
+  "power": 25,
+  "pp": 20,
+  "category": "PHYSICAL",
+  "accuracy": 100,
+  "type": {
+    "name": "BUG",
+    "weakAgainst": ["FIRE", "FLYING"],
+    "effectiveAgainst": ["GRASS", "PSYCHIC"]
+  }
+}
+{
+  "_id": { "$oid":"60a64f7eae945a6e60b0e91a" },
+  "schemaVersion": 2,
+  "name": "Rage",
+  "power": 20,
+  "pp": 20,
+  "category": "PHYSICAL",
+  "accuracy": 100,
+  "type": {
+    "name": "NORMAL",
+    "weakAgainst": ["ROCK"],
+    "effectiveAgainst": []
+  }
+}
+{
+  "_id": { "$oid":"60a64f7eae945a6e60b0e91c" },
+  "schemaVersion": 2,
+  "name": "Gust",
+  "power": 40,
+  "pp": 35,
+  "category": "SPECIAL",
+  "accuracy": 100,
+  "type": {
+    "name": "FLYING",
+    "weakAgainst": ["ROCK", "ELECTRIC", "ICE"],
+    "effectiveAgainst": ["GRASS", "FIGHTING", "BUG"]
+  }
+}
+{
+  "_id": { "$oid":"60a64f7eae945a6e60b0e91d" },
+  "schemaVersion": 2,
+  "name": "Confusion",
+  "power": 50,
+  "pp": 25,
+  "category": "SPECIAL",
+  "accuracy": 100,
+  "type": {
+    "name": "PSYCHIC",
+    "weakAgainst": ["BUG", "GHOST", "DARK"],
+    "effectiveAgainst": ["FIGHTING", "POISON"]
+  }
+}

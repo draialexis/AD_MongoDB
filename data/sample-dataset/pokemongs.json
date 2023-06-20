@@ -96,3 +96,97 @@
     }
   ]
 }
+{
+  "_id": {
+    "$oid": "60a64f7eae945a6e60b0e918"
+  },
+  "schemaVersion": 1,
+  "nickname": "Buzzy",
+  "dob": {
+    "$date": {
+      "$numberLong": "761597651000"
+    }
+  },
+  "level": 8,
+  "pokedexId": 15,
+  "evoStage": 2,
+  "evoTrack": [
+    "WEEDLE",
+    "KAKUNA",
+    "BEEDRILL"
+  ],
+  "types": [
+    {
+      "name": "BUG",
+      "weakAgainst": [
+        "FIRE",
+        "FLYING"
+      ],
+      "effectiveAgainst": [
+        "GRASS",
+        "PSYCHIC"
+      ]
+    }
+  ],
+  "moveSet": [
+    {
+      "_id": {
+        "$oid": "60a64f7eae945a6e60b0e919"
+      },
+      "name": "Twineedle"
+    },
+    {
+      "_id": {
+        "$oid": "60a64f7eae945a6e60b0e91a"
+      },
+      "name": "Rage"
+    }
+  ]
+}
+{
+  "_id": {
+    "$oid": "60a64f7eae945a6e60b0e91b"
+  },
+  "schemaVersion": 1,
+  "nickname": "Flutter",
+  "dob": {
+    "$date": {
+      "$numberLong": "861597551000"
+    }
+  },
+  "level": 12,
+  "pokedexId": 12,
+  "evoStage": 2,
+  "evoTrack": [
+    "CATERPIE",
+    "METAPOD",
+    "BUTTERFREE"
+  ],
+  "types": [
+    {
+      "name": "BUG",
+      "weakAgainst": [
+        "FIRE",
+        "FLYING"
+      ],
+      "effectiveAgainst": [
+        "GRASS",
+        "PSYCHIC"
+      ]
+    }
+  ],
+  "moveSet": [
+    {
+      "_id": {
+        "$oid": "60a64f7eae945a6e60b0e91c"
+      },
+      "name": "Gust"
+    },
+    {
+      "_id": {
+        "$oid": "60a64f7eae945a6e60b0e91d"
+      },
+      "name": "Confusion"
+    }
+  ]
+}

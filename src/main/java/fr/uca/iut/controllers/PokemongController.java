@@ -39,10 +39,10 @@ public class PokemongController extends GenericController<Pokemong> {
     }
 
     @GET
-    @Path("/dob/{startDate}/{endDate}")
+    @Path("/dob/{start-date}/{end-date}")
     public Response findByDateOfBirthInterval(
-            @PathParam("startDate") String startDate,
-            @PathParam("endDate") String endDate
+            @PathParam("start-date") String startDate,
+            @PathParam("end-date") String endDate
     ) {
         if (StringUtils.isBlankStringOrNull(startDate) || StringUtils.isBlankStringOrNull(endDate)) {
             return Response.ok(new ArrayList<>())
@@ -59,4 +59,10 @@ public class PokemongController extends GenericController<Pokemong> {
         }
     }
 
+    @GET
+    @Path("/count-by-evo-stage")
+    public Response countPokemongsByEvoStage() {
+        return Response.ok(pokemongService.countPokemongsByEvoStage())
+                .build();
+    }
 }

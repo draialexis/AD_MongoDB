@@ -10,6 +10,7 @@
     - [🌺Special requests](#special-requests)
         - [`Pokemong` by nickname](#pokemong-by-nickname)
         - [`Pokemong` in date interval](#pokemong-in-date-interval)
+    - [🦚Aggregation pipeline](#aggregation-pipeline)
 - [Prep steps](#prep-steps)
     - [♨️Java version](#java-version)
     - [🔐Database connection](#database-connection)
@@ -309,8 +310,32 @@ where `{nickname}` is a partial, case-insensitive search term.
 
 #### `Pokemong` in date interval
 
-Users can also use the route `pokemong/dob/{startDate}/{endDate}` to search for
+Users can also use the route `pokemong/dob/{start-date}/{end-date}` to search for
 `pokemongs` who where born within that interval (bounds included).
+
+### 🦚Aggregation pipeline
+
+Finally, the endpoint `pokemong/count-by-evo-stage` is provided, to get a mapping of evolution stages with
+the number of `pokemongs`who achieved that evolution stage.
+
+As an example of a potential output:
+
+```json
+[
+  {
+    "count": 15,
+    "evoStage": 0
+  },
+  {
+    "count": 4,
+    "evoStage": 1
+  },
+  {
+    "count": 5,
+    "evoStage": 2
+  }
+]
+```
 
 ## Prep steps
 
@@ -376,11 +401,13 @@ You can run the application in dev mode using:
 
 <details><summary>🏫 If you are the corrector</summary>
 
-Please navigate to the root of this project in a terminal and run the provided `load_data.sh` script.
+The database should already be populated with the sample dataset.
+
+However, if you want to reload that dataset, please navigate to the root of this project in a terminal and run
+the provided `load_data.sh` script.
 
 If the script wasn't provided, that was a mistake. Sorry. Please request them to the owner of this repo, or follow the
-alternate
-procedure below.
+alternate procedure below.
 
 </details> 
 
